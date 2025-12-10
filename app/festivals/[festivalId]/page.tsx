@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import HeaderNav from '@/components/HeaderNav'
 import BandRatingComponent from '@/components/BandRating'
 import { LineupWithBand } from '@/lib/types/database'
 
@@ -72,29 +73,7 @@ export default async function FestivalDetailPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="text-2xl font-bold text-purple-600">
-              🎸 Lineup Wars
-            </Link>
-            <nav className="flex gap-4">
-              <Link
-                href="/festivals"
-                className="text-purple-600 font-semibold"
-              >
-                Festivals
-              </Link>
-              <Link
-                href="/groups"
-                className="text-gray-600 hover:text-purple-600"
-              >
-                Groups
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <HeaderNav active="festivals" />
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
