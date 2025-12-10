@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Festival } from '@/lib/types/database'
+import HeaderNav from '@/components/HeaderNav'
 
 export const dynamic = 'force-dynamic'
 
@@ -117,29 +118,7 @@ export default async function GroupDetailPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="text-2xl font-bold text-purple-600">
-              🎸 Lineup Wars
-            </Link>
-            <nav className="flex gap-4">
-              <Link
-                href="/festivals"
-                className="text-gray-600 hover:text-purple-600"
-              >
-                Festivals
-              </Link>
-              <Link
-                href="/groups"
-                className="text-purple-600 font-semibold"
-              >
-                Groups
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <HeaderNav active="groups" />
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">

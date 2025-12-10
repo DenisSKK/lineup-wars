@@ -102,21 +102,6 @@ CREATE INDEX IF NOT EXISTS idx_group_members_user_id ON group_members(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_festivals_user_id ON user_festivals(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_festivals_festival_id ON user_festivals(festival_id);
 
--- Group invitations: allow inviting users to groups with confirmation
-CREATE TABLE IF NOT EXISTS group_invitations (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
-  inviter_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  invitee_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  status TEXT NOT NULL CHECK (status IN ('pending','accepted','declined','cancelled')) DEFAULT 'pending',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(group_id, invitee_id)
-);
-
-CREATE INDEX IF NOT EXISTS idx_group_invitations_group_id ON group_invitations(group_id);
-CREATE INDEX IF NOT EXISTS idx_group_invitations_invitee_id ON group_invitations(invitee_id);
-
 -- Create Row Level Security (RLS) policies
 
 -- Enable RLS
@@ -128,7 +113,6 @@ ALTER TABLE band_ratings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE groups ENABLE ROW LEVEL SECURITY;
 ALTER TABLE group_members ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_festivals ENABLE ROW LEVEL SECURITY;
-ALTER TABLE group_invitations ENABLE ROW LEVEL SECURITY;
 
 -- Profiles: Users can read all profiles, but only update their own
 CREATE POLICY "Public profiles are viewable by everyone" ON profiles
@@ -199,37 +183,6 @@ CREATE POLICY "Users can select festivals" ON user_festivals
 CREATE POLICY "Users can deselect festivals" ON user_festivals
   FOR DELETE USING (auth.uid() = user_id);
 
--- Group invitations policies
--- Viewable by inviter, invitee, and group creator
-CREATE POLICY "Invitations are viewable by involved users" ON group_invitations
-  FOR SELECT USING (
-    auth.uid() = inviter_id OR auth.uid() = invitee_id OR 
-    EXISTS (
-      SELECT 1 FROM groups g WHERE g.id = group_id AND g.created_by = auth.uid()
-    )
-  );
-
--- Only group creator or any current member can create invitations, but inviter must be auth.uid
-CREATE POLICY "Users can create invitations" ON group_invitations
-  FOR INSERT WITH CHECK (
-    auth.uid() = inviter_id AND 
-    EXISTS (
-      SELECT 1 FROM group_members gm WHERE gm.group_id = group_invitations.group_id AND gm.user_id = auth.uid()
-    )
-  );
-
--- Invitee can update status to accepted/declined; inviter can cancel
-CREATE POLICY "Users can update invitations" ON group_invitations
-  FOR UPDATE USING (
-    auth.uid() = invitee_id OR auth.uid() = inviter_id
-  ) WITH CHECK (
-    auth.uid() = invitee_id OR auth.uid() = inviter_id
-  );
-
--- Allow inviter to delete (cancel) their invitation
-CREATE POLICY "Inviter can delete invitation" ON group_invitations
-  FOR DELETE USING (auth.uid() = inviter_id);
-
 -- Function to automatically create profile on signup
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
@@ -269,7 +222,4 @@ CREATE TRIGGER update_band_ratings_updated_at BEFORE UPDATE ON band_ratings
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_groups_updated_at BEFORE UPDATE ON groups
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE TRIGGER update_group_invitations_updated_at BEFORE UPDATE ON group_invitations
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
