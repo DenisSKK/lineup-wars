@@ -1,8 +1,6 @@
 -- Database Schema for Lineup Wars
 -- Initial migration created: 2024-12-10
 
--- Enable UUID extension
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create profiles table (extends Supabase auth.users)
 CREATE TABLE IF NOT EXISTS profiles (
@@ -15,7 +13,7 @@ CREATE TABLE IF NOT EXISTS profiles (
 
 -- Create festivals table
 CREATE TABLE IF NOT EXISTS festivals (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   year INTEGER NOT NULL,
   location TEXT,
@@ -30,7 +28,7 @@ CREATE TABLE IF NOT EXISTS festivals (
 
 -- Create bands table
 CREATE TABLE IF NOT EXISTS bands (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT UNIQUE NOT NULL,
   genre TEXT,
   country TEXT,
@@ -42,7 +40,7 @@ CREATE TABLE IF NOT EXISTS bands (
 
 -- Create lineups table (connects festivals and bands)
 CREATE TABLE IF NOT EXISTS lineups (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   festival_id UUID NOT NULL REFERENCES festivals(id) ON DELETE CASCADE,
   band_id UUID NOT NULL REFERENCES bands(id) ON DELETE CASCADE,
   day_number INTEGER,
@@ -54,7 +52,7 @@ CREATE TABLE IF NOT EXISTS lineups (
 
 -- Create band_ratings table
 CREATE TABLE IF NOT EXISTS band_ratings (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   band_id UUID NOT NULL REFERENCES bands(id) ON DELETE CASCADE,
   festival_id UUID NOT NULL REFERENCES festivals(id) ON DELETE CASCADE,
@@ -66,7 +64,7 @@ CREATE TABLE IF NOT EXISTS band_ratings (
 
 -- Create groups table
 CREATE TABLE IF NOT EXISTS groups (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   description TEXT,
   created_by UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
@@ -76,7 +74,7 @@ CREATE TABLE IF NOT EXISTS groups (
 
 -- Create group_members table
 CREATE TABLE IF NOT EXISTS group_members (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   joined_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -85,7 +83,7 @@ CREATE TABLE IF NOT EXISTS group_members (
 
 -- Create user_festivals table (tracks which festivals a user has selected to rate)
 CREATE TABLE IF NOT EXISTS user_festivals (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   festival_id UUID NOT NULL REFERENCES festivals(id) ON DELETE CASCADE,
   selected_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
