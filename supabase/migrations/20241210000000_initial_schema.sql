@@ -1,4 +1,5 @@
 -- Database Schema for Lineup Wars
+-- Initial migration created: 2024-12-10
 
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

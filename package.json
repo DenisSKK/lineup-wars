@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "supabase": "supabase",
+    "db:migration:new": "timestamp=$(date -u +%Y%m%d%H%M%S) && read -p 'Migration name: ' name && touch supabase/migrations/${timestamp}_${name}.sql && echo \"Created supabase/migrations/${timestamp}_${name}.sql\"",
+    "db:migration:list": "ls -1 supabase/migrations/",
+    "db:push": "supabase db push",
+    "db:reset": "supabase db reset",
+    "db:link": "supabase link"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
@@ -22,6 +28,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.0.8",
+    "supabase": "^2.65.8",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
