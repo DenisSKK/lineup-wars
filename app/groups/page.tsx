@@ -47,10 +47,20 @@ export default async function GroupsPage() {
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">My Groups</h1>
-          <p className="text-gray-600">
-            Create groups with friends and compare festival ratings
-          </p>
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-4xl font-bold text-gray-800 mb-2">My Groups</h1>
+              <p className="text-gray-600">
+                Create groups with friends and compare festival ratings
+              </p>
+            </div>
+            <Link
+              href="/groups/declined"
+              className="px-4 py-2 text-sm bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+            >
+              View Declined Invitations
+            </Link>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">

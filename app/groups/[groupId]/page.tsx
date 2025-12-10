@@ -5,6 +5,7 @@ import { Festival } from '@/lib/types/database'
 import HeaderNav from '@/components/HeaderNav'
 import InviteUserForm from '@/components/InviteUserForm'
 import PendingInvitations from '@/components/PendingInvitations'
+import JoinRequests from '@/components/JoinRequests'
 
 export const dynamic = 'force-dynamic'
 
@@ -60,10 +61,11 @@ export default async function GroupDetailPage({ params }: Props) {
     `)
     .eq('group_id', groupId)
 
-  // Fetch pending invitations (only for creator)
+  // Fetch pending invitations and join requests (only for creator)
   let pendingInvitations = []
+  let joinRequests = []
   if (isCreator) {
-    const { data } = await supabase
+    const { data: invites } = await supabase
       .from('group_invitations')
       .select(`
         *,
@@ -73,7 +75,19 @@ export default async function GroupDetailPage({ params }: Props) {
       .eq('status', 'pending')
       .order('created_at', { ascending: false })
 
-    pendingInvitations = data || []
+    pendingInvitations = invites || []
+
+    const { data: requests } = await supabase
+      .from('group_invitations')
+      .select(`
+        *,
+        profile:invited_user_id(email, full_name)
+      `)
+      .eq('group_id', groupId)
+      .eq('status', 'requested')
+      .order('created_at', { ascending: false })
+
+    joinRequests = requests || []
   }
 
   // Fetch all festivals
@@ -186,6 +200,7 @@ export default async function GroupDetailPage({ params }: Props) {
 
             {isCreator && (
               <>
+                <JoinRequests groupId={groupId} initialRequests={joinRequests} />
                 <InviteUserForm groupId={groupId} />
                 <PendingInvitations groupId={groupId} initialInvitations={pendingInvitations} />
               </>
