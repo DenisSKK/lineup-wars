@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-type ActiveTab = 'festivals' | 'groups' | 'invitations' | null
+type ActiveTab = 'festivals' | 'groups' | null
 
 interface HeaderNavProps {
   active?: ActiveTab
