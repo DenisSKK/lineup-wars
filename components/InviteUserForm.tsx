@@ -57,12 +57,18 @@ export default function InviteUserForm({ groupId }: Props) {
       const excludeIds = [user.id, ...memberIds, ...invitedIds]
 
       // Search for users excluding current user, members, and anyone with existing invitations
-      const { data: users, error } = await supabase
+      let query = supabase
         .from('profiles')
         .select('id, email, full_name')
         .or(`email.ilike.%${searchQuery}%,full_name.ilike.%${searchQuery}%`)
-        .not('id', 'in', `(${excludeIds.join(',')})`)
         .limit(10)
+
+      // Only add the exclusion filter if there are IDs to exclude
+      if (excludeIds.length > 0) {
+        query = query.not('id', 'in', `(${excludeIds.join(',')})`)
+      }
+
+      const { data: users, error } = await query
 
       if (error) throw error
 
