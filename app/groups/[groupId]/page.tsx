@@ -6,6 +6,7 @@ import HeaderNav from '@/components/HeaderNav'
 import InviteUserForm from '@/components/InviteUserForm'
 import PendingInvitations from '@/components/PendingInvitations'
 import JoinRequests from '@/components/JoinRequests'
+import GroupMembersList from '@/components/GroupMembersList'
 
 export const dynamic = 'force-dynamic'
 
@@ -179,24 +180,12 @@ export default async function GroupDetailPage({ params }: Props) {
 
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1 space-y-6">
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Members</h2>
-              <ul className="space-y-2">
-                {members?.map((member: { id: string; user_id: string; profile: { full_name?: string; email: string } }) => (
-                  <li key={member.id} className="flex items-center gap-2">
-                    <span className="text-2xl">👤</span>
-                    <div>
-                      <p className="font-medium text-gray-800">
-                        {member.profile.full_name || member.profile.email}
-                      </p>
-                      {member.user_id === group.created_by && (
-                        <p className="text-xs text-purple-600">Creator</p>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <GroupMembersList
+              groupId={groupId}
+              groupOwnerId={group.created_by}
+              currentUserId={user.id}
+              initialMembers={members || []}
+            />
 
             {isCreator && (
               <>
