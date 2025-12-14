@@ -45,7 +45,10 @@ export default function InviteUserForm({ groupId }: Props) {
 
       const memberIds = members?.map(m => m.user_id) || []
 
-      // Get ALL invitations (any status) to avoid duplicate key errors
+      // Get ALL invitations regardless of status (pending, accepted, declined, requested)
+      // This is necessary because the group_invitations table has a UNIQUE constraint
+      // on (group_id, invited_user_id), so we cannot create duplicate invitation records
+      // for the same user-group pair, even if their previous invitation was declined
       const { data: invitations } = await supabase
         .from('group_invitations')
         .select('invited_user_id')
