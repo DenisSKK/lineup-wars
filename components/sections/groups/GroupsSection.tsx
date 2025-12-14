@@ -360,14 +360,17 @@ export function GroupsSection({ user }: GroupsSectionProps) {
       title: "Remove Member",
       message: `Are you sure you want to remove ${memberName} from the group?`,
       onConfirm: async () => {
-        const { error } = await supabase.rpc("remove_group_member", {
+        const { data, error } = await supabase.rpc("remove_group_member", {
           p_group_id: selectedGroup.id,
           p_user_id: memberId,
         });
         
-        if (!error) {
+        if (!error && data?.success) {
           // Refresh group members
           openGroupDrawer(selectedGroup);
+        } else {
+          // Handle error - could show a toast notification here
+          console.error("Failed to remove member:", error || data?.error);
         }
         setConfirmModal({ isOpen: false, title: "", message: "", onConfirm: () => {} });
       },
