@@ -7,6 +7,7 @@ import InviteUserForm from '@/components/InviteUserForm'
 import PendingInvitations from '@/components/PendingInvitations'
 import JoinRequests from '@/components/JoinRequests'
 import GroupMembersList from '@/components/GroupMembersList'
+import DeleteGroupButton from '@/components/DeleteGroupButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -165,15 +166,22 @@ export default async function GroupDetailPage({ params }: Props) {
             ← Back to Groups
           </Link>
           <div className="bg-white rounded-lg shadow-md p-8">
-            <h1 className="text-4xl font-bold text-gray-800 mb-2">
-              {group.name}
-            </h1>
-            {group.description && (
-              <p className="text-gray-600 mb-4">{group.description}</p>
-            )}
-            <div className="flex items-center gap-2 text-gray-600">
-              <span>👥</span>
-              <span>{members?.length || 0} members</span>
+            <div className="flex items-start justify-between mb-2">
+              <div className="flex-1">
+                <h1 className="text-4xl font-bold text-gray-800 mb-2">
+                  {group.name}
+                </h1>
+                {group.description && (
+                  <p className="text-gray-600 mb-4">{group.description}</p>
+                )}
+                <div className="flex items-center gap-2 text-gray-600">
+                  <span>👥</span>
+                  <span>{members?.length || 0} members</span>
+                </div>
+              </div>
+              {isCreator && (
+                <DeleteGroupButton groupId={groupId} groupName={group.name} />
+              )}
             </div>
           </div>
         </div>
