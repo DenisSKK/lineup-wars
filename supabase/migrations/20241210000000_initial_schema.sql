@@ -1,5 +1,5 @@
 -- Database Schema for Lineup Wars
--- Initial migration created: 2024-12-10
+-- Initial migration created: 2025-12-10
 
 
 -- Create profiles table (extends Supabase auth.users)

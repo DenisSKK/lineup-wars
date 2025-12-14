@@ -3,6 +3,9 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Festival } from '@/lib/types/database'
 import HeaderNav from '@/components/HeaderNav'
+import InviteUserForm from '@/components/InviteUserForm'
+import PendingInvitations from '@/components/PendingInvitations'
+import JoinRequests from '@/components/JoinRequests'
 
 export const dynamic = 'force-dynamic'
 
@@ -46,6 +49,9 @@ export default async function GroupDetailPage({ params }: Props) {
     redirect('/groups')
   }
 
+  // Check if user is the group creator
+  const isCreator = group.created_by === user.id
+
   // Fetch all group members with profiles
   const { data: members } = await supabase
     .from('group_members')
@@ -54,6 +60,35 @@ export default async function GroupDetailPage({ params }: Props) {
       profile:profiles(*)
     `)
     .eq('group_id', groupId)
+
+  // Fetch pending invitations and join requests (only for creator)
+  let pendingInvitations = []
+  let joinRequests = []
+  if (isCreator) {
+    const { data: invites } = await supabase
+      .from('group_invitations')
+      .select(`
+        *,
+        profile:invited_user_id(email, full_name)
+      `)
+      .eq('group_id', groupId)
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false })
+
+    pendingInvitations = invites || []
+
+    const { data: requests } = await supabase
+      .from('group_invitations')
+      .select(`
+        *,
+        profile:invited_user_id(email, full_name)
+      `)
+      .eq('group_id', groupId)
+      .eq('status', 'requested')
+      .order('created_at', { ascending: false })
+
+    joinRequests = requests || []
+  }
 
   // Fetch all festivals
   const { data: festivals } = await supabase
@@ -143,7 +178,7 @@ export default async function GroupDetailPage({ params }: Props) {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 space-y-6">
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-bold text-gray-800 mb-4">Members</h2>
               <ul className="space-y-2">
@@ -162,6 +197,14 @@ export default async function GroupDetailPage({ params }: Props) {
                 ))}
               </ul>
             </div>
+
+            {isCreator && (
+              <>
+                <JoinRequests groupId={groupId} initialRequests={joinRequests} />
+                <InviteUserForm groupId={groupId} />
+                <PendingInvitations groupId={groupId} initialInvitations={pendingInvitations} />
+              </>
+            )}
           </div>
 
           <div className="lg:col-span-2">

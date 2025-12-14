@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import InvitationBadge from './InvitationBadge'
 
 type ActiveTab = 'festivals' | 'groups' | null
 
@@ -14,7 +15,7 @@ export default function HeaderNav({ active = null }: HeaderNavProps) {
           <Link href="/" className="text-2xl font-bold text-purple-600">
             🎸 Lineup Wars
           </Link>
-          <nav className="flex gap-4">
+          <nav className="flex gap-4 items-center">
             <Link
               href="/festivals"
               className={active === 'festivals' ? 'text-purple-600 font-semibold' : 'text-gray-600 hover:text-purple-600'}
@@ -27,6 +28,7 @@ export default function HeaderNav({ active = null }: HeaderNavProps) {
             >
               Groups
             </Link>
+            <InvitationBadge />
           </nav>
         </div>
       </div>
