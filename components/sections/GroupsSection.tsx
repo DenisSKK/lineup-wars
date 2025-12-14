@@ -63,6 +63,8 @@ export function GroupsSection({ user }: GroupsSectionProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [rankings, setRankings] = useState<FestivalRanking[]>([]);
   const [isLoadingRankings, setIsLoadingRankings] = useState(false);
+  const [expandedDescriptions, setExpandedDescriptions] = useState<Set<string>>(new Set());
+  const [isDrawerDescriptionExpanded, setIsDrawerDescriptionExpanded] = useState(false);
   
   // Create group form state
   const [newGroupName, setNewGroupName] = useState("");
@@ -174,6 +176,7 @@ export function GroupsSection({ user }: GroupsSectionProps) {
     setSelectedGroup(group);
     setIsDrawerOpen(true);
     setIsLoadingRankings(true);
+    setIsDrawerDescriptionExpanded(false);
     
     // Fetch group members
     const { data: members } = await supabase
@@ -362,6 +365,20 @@ export function GroupsSection({ user }: GroupsSectionProps) {
     fetchGroups();
   };
   
+  // Toggle description expansion
+  const toggleDescription = (groupId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setExpandedDescriptions(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(groupId)) {
+        newSet.delete(groupId);
+      } else {
+        newSet.add(groupId);
+      }
+      return newSet;
+    });
+  };
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -506,9 +523,22 @@ export function GroupsSection({ user }: GroupsSectionProps) {
                             )}
                           </div>
                           {group.description && (
-                            <p className="text-sm text-[var(--foreground-muted)] mb-3">
-                              {group.description}
-                            </p>
+                            <div className="mb-3">
+                              <p className={cn(
+                                "text-sm text-[var(--foreground-muted)]",
+                                !expandedDescriptions.has(group.id) && "line-clamp-1"
+                              )}>
+                                {group.description}
+                              </p>
+                              {group.description.length > 80 && (
+                                <button
+                                  onClick={(e) => toggleDescription(group.id, e)}
+                                  className="text-xs text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] mt-1 font-medium"
+                                >
+                                  {expandedDescriptions.has(group.id) ? "Show less" : "Show more"}
+                                </button>
+                              )}
+                            </div>
                           )}
                           <div className="flex items-center gap-4">
                             <Badge variant="outline">
@@ -565,9 +595,25 @@ export function GroupsSection({ user }: GroupsSectionProps) {
                       )}
                     </div>
                     {selectedGroup.description && (
-                      <p className="text-[var(--foreground-muted)] mt-1">
-                        {selectedGroup.description}
-                      </p>
+                      <div className="mt-1">
+                        <p className={cn(
+                          "text-[var(--foreground-muted)]",
+                          !isDrawerDescriptionExpanded && "line-clamp-1"
+                        )}>
+                          {selectedGroup.description}
+                        </p>
+                        {selectedGroup.description.length > 80 && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsDrawerDescriptionExpanded(!isDrawerDescriptionExpanded);
+                            }}
+                            className="text-xs text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] mt-1 font-medium"
+                          >
+                            {isDrawerDescriptionExpanded ? "Show less" : "Show more"}
+                          </button>
+                        )}
+                      </div>
                     )}
                   </div>
                   <button
