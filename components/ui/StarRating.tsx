@@ -29,8 +29,6 @@ export function StarRating({
   
   const starSize = sizes[size];
   
-  // Convert 1-10 rating to 0.5-5 stars
-  const stars = rating ? rating / 2 : 0;
   const displayRating = hoveredRating !== null ? hoveredRating : rating;
   
   const handleStarClick = (starIndex: number) => {
