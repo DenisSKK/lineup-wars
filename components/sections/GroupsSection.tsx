@@ -724,15 +724,21 @@ export function GroupsSection({ user }: GroupsSectionProps) {
                       Invite Users
                     </h4>
                     
-                    <Input
-                      placeholder="Search by email or name..."
-                      value={searchQuery}
-                      onChange={(e) => {
-                        setSearchQuery(e.target.value);
-                        searchUsers(e.target.value);
-                      }}
-                      icon={<Search className="h-5 w-5" />}
-                    />
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="Search by email or name..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        icon={<Search className="h-5 w-5" />}
+                      />
+                      <Button
+                        size="md"
+                        onClick={() => searchUsers(searchQuery)}
+                        disabled={searchQuery.length < 2}
+                      >
+                        Search
+                      </Button>
+                    </div>
                     
                     {searchResults.length > 0 && (
                       <div className="mt-3 space-y-2">
