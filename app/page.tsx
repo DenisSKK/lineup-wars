@@ -35,8 +35,10 @@ export default function HomePage() {
   
   // Fetch user on mount
   useEffect(() => {
+    const supabaseClient = createClient();
+    
     const fetchUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabaseClient.auth.getUser();
       setUser(user);
       setIsLoading(false);
     };
@@ -44,16 +46,16 @@ export default function HomePage() {
     fetchUser();
     
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+    const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user || null);
       }
     );
     
     return () => {
-      subscription.unsubscribe();
+      subscription?.unsubscribe();
     };
-  }, [supabase]);
+  }, []);
   
   // Handle hash navigation on load
   useEffect(() => {
