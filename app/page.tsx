@@ -16,9 +16,7 @@ export default function HomePage() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("home");
-  
-  const supabase = createClient();
-  
+    
   // Intersection observers for each section
   const { ref: homeRef, inView: homeInView } = useInView({ threshold: 0.3 });
   const { ref: festivalsRef, inView: festivalsInView } = useInView({ threshold: 0.3 });
