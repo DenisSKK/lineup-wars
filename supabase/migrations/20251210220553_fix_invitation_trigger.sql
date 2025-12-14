@@ -1,5 +1,5 @@
 -- Fix invitation accepted trigger to work with 'requested' status
--- Migration created: 2024-12-10
+-- Migration created: 2025-12-10
 
 -- Update function to handle acceptance from any status (pending or requested)
 CREATE OR REPLACE FUNCTION handle_invitation_accepted()

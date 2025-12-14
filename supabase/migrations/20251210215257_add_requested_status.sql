@@ -1,5 +1,5 @@
 -- Add 'requested' status to group_invitations
--- Migration created: 2024-12-10
+-- Migration created: 2025-12-10
 
 -- Update the check constraint to include 'requested' status
 ALTER TABLE group_invitations

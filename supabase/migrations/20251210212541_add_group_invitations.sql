@@ -1,5 +1,5 @@
 -- Add group invitations table
--- Migration created: 2024-12-10
+-- Migration created: 2025-12-10
 
 -- Create group_invitations table
 CREATE TABLE IF NOT EXISTS group_invitations (
