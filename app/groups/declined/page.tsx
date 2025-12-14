@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import HeaderNav from '@/components/HeaderNav'
 import RequestToJoinButton from '@/components/RequestToJoinButton'
+import { DeclinedInvitation } from '@/lib/types/groups'
 
 export const dynamic = 'force-dynamic'
 
@@ -64,7 +65,7 @@ export default async function DeclinedInvitationsPage() {
             </div>
           ) : (
             <div className="space-y-4">
-              {declinedInvitations.map((invitation: any) => (
+              {declinedInvitations.map((invitation: DeclinedInvitation) => (
                 <div key={invitation.id} className="bg-white rounded-lg shadow-md p-6">
                   <div className="mb-4">
                     <h2 className="text-2xl font-bold text-gray-800 mb-2">

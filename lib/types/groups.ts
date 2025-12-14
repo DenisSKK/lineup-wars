@@ -42,3 +42,18 @@ export interface PendingInvitation {
     full_name: string | null
   }
 }
+
+export interface DeclinedInvitation {
+  id: string
+  group_id: string
+  invited_user_id: string
+  invited_by: string
+  status: string
+  created_at: string
+  updated_at: string
+  group: {
+    id: string
+    name: string
+    description: string | null
+  }
+}
