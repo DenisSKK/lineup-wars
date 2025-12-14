@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import HeaderNav from '@/components/HeaderNav'
 import RespondToInvitation from '@/components/RespondToInvitation'
+import { GroupInvitationWithDetails } from '@/lib/types/groups'
 
 export const dynamic = 'force-dynamic'
 
@@ -69,7 +70,7 @@ export default async function InvitationsPage() {
             </div>
           ) : (
             <div className="space-y-4">
-              {invitations.map((invitation: any) => (
+              {invitations.map((invitation: GroupInvitationWithDetails) => (
                 <RespondToInvitation
                   key={invitation.id}
                   invitation={invitation}

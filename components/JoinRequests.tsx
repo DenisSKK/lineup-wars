@@ -3,16 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-
-interface JoinRequest {
-  id: string
-  invited_user_id: string
-  created_at: string
-  profile: {
-    email: string
-    full_name: string | null
-  }
-}
+import { JoinRequest } from '@/lib/types/groups'
 
 interface Props {
   groupId: string

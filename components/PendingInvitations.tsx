@@ -2,21 +2,11 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-
-interface Invitation {
-  id: string
-  invited_user_id: string
-  status: string
-  created_at: string
-  profile: {
-    email: string
-    full_name: string | null
-  }
-}
+import { PendingInvitation } from '@/lib/types/groups'
 
 interface Props {
   groupId: string
-  initialInvitations: Invitation[]
+  initialInvitations: PendingInvitation[]
 }
 
 export default function PendingInvitations({ groupId, initialInvitations }: Props) {

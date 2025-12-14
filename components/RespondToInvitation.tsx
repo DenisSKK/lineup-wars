@@ -3,23 +3,10 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-
-interface Invitation {
-  id: string
-  group: {
-    id: string
-    name: string
-    description: string | null
-  }
-  inviter: {
-    email: string
-    full_name: string | null
-  }
-  created_at: string
-}
+import { GroupInvitationWithDetails } from '@/lib/types/groups'
 
 interface Props {
-  invitation: Invitation
+  invitation: GroupInvitationWithDetails
 }
 
 export default function RespondToInvitation({ invitation }: Props) {
