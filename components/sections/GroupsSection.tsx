@@ -28,7 +28,8 @@ import {
   Avatar,
   AvatarStack,
   Skeleton,
-  SkeletonList
+  SkeletonList,
+  StarRatingDisplay
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import type { Group, Profile, Festival } from "@/lib/types/database";
@@ -706,12 +707,16 @@ export function GroupsSection({ user }: GroupsSectionProps) {
                               #{index + 1}
                             </div>
                             <div className="flex-1">
-                              <h5 className="font-semibold text-[var(--foreground)]">
+                              <h5 className="font-semibold text-[var(--foreground)] mb-2">
                                 {ranking.festival.name}
                               </h5>
-                              <p className="text-sm text-[var(--foreground-muted)] mb-2">
-                                Average: {ranking.averageRating.toFixed(2)}/10
-                              </p>
+                              <div className="flex items-center gap-2 mb-2">
+                                <StarRatingDisplay 
+                                  rating={ranking.averageRating} 
+                                  size="sm"
+                                  showValue={false}
+                                />
+                              </div>
                               {ranking.topBands.length > 0 && (
                                 <div className="flex flex-wrap gap-2">
                                   {ranking.topBands.map((band) => (

@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, MapPin, Calendar, Music2, X, Star, ChevronRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { Card, CardContent, Button, Badge, Input, Skeleton, SkeletonCard } from "@/components/ui";
+import { Card, CardContent, Button, Badge, Input, Skeleton, SkeletonCard, StarRating } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import type { Festival, Band, Lineup, BandRating } from "@/lib/types/database";
 import type { User } from "@supabase/supabase-js";
@@ -389,31 +389,13 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
                               </div>
                             </div>
                             
-                            {/* Rating Buttons */}
-                            <div className="flex flex-wrap gap-1">
-                              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((rating) => {
-                                const isSelected = currentRating === rating;
-                                let colorClass = "bg-[var(--background-tertiary)] hover:bg-[var(--border)]";
-                                
-                                if (isSelected) {
-                                  if (rating <= 3) colorClass = "bg-[var(--rating-low)] text-white";
-                                  else if (rating <= 6) colorClass = "bg-[var(--rating-mid)] text-black";
-                                  else colorClass = "bg-[var(--rating-high)] text-white";
-                                }
-                                
-                                return (
-                                  <button
-                                    key={rating}
-                                    onClick={() => rateBand(band.id, rating)}
-                                    className={cn(
-                                      "w-8 h-8 rounded-md text-sm font-medium transition-all",
-                                      colorClass
-                                    )}
-                                  >
-                                    {rating}
-                                  </button>
-                                );
-                              })}
+                            {/* Star Rating */}
+                            <div className="flex items-center gap-2">
+                              <StarRating
+                                rating={currentRating || null}
+                                onRatingChange={(rating) => rateBand(band.id, rating)}
+                                size="lg"
+                              />
                             </div>
                           </div>
                         </Card>
