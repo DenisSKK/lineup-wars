@@ -29,7 +29,8 @@ import {
   AvatarStack,
   Skeleton,
   SkeletonList,
-  StarRatingDisplay
+  StarRatingDisplay,
+  ConfirmModal
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import type { Group, Profile, Festival } from "@/lib/types/database";
@@ -65,6 +66,12 @@ export function GroupsSection({ user }: GroupsSectionProps) {
   const [isLoadingRankings, setIsLoadingRankings] = useState(false);
   const [expandedDescriptions, setExpandedDescriptions] = useState<Set<string>>(new Set());
   const [isDrawerDescriptionExpanded, setIsDrawerDescriptionExpanded] = useState(false);
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  }>({ isOpen: false, title: "", message: "", onConfirm: () => {} });
   
   // Create group form state
   const [newGroupName, setNewGroupName] = useState("");
@@ -353,16 +360,22 @@ export function GroupsSection({ user }: GroupsSectionProps) {
   const deleteGroup = async () => {
     if (!selectedGroup || !user || selectedGroup.created_by !== user.id) return;
     
-    if (!confirm("Are you sure you want to delete this group?")) return;
-    
-    await supabase
-      .from("groups")
-      .delete()
-      .eq("id", selectedGroup.id);
-    
-    setIsDrawerOpen(false);
-    setSelectedGroup(null);
-    fetchGroups();
+    setConfirmModal({
+      isOpen: true,
+      title: "Delete Group",
+      message: `Are you sure you want to delete "${selectedGroup.name}"? This action cannot be undone.`,
+      onConfirm: async () => {
+        await supabase
+          .from("groups")
+          .delete()
+          .eq("id", selectedGroup.id);
+        
+        setIsDrawerOpen(false);
+        setSelectedGroup(null);
+        fetchGroups();
+        setConfirmModal({ isOpen: false, title: "", message: "", onConfirm: () => {} });
+      },
+    });
   };
   
   // Toggle description expansion
@@ -376,6 +389,33 @@ export function GroupsSection({ user }: GroupsSectionProps) {
         newSet.add(groupId);
       }
       return newSet;
+    });
+  };
+  
+  // Remove member from group
+  const removeMember = async (memberId: string) => {
+    if (!selectedGroup || !user || selectedGroup.created_by !== user.id) return;
+    if (memberId === selectedGroup.created_by) return; // Can't remove owner
+    
+    const memberToRemove = selectedGroup.members?.find(m => m.user_id === memberId);
+    const memberName = memberToRemove?.profile.full_name || memberToRemove?.profile.email || "this member";
+    
+    setConfirmModal({
+      isOpen: true,
+      title: "Remove Member",
+      message: `Are you sure you want to remove ${memberName} from the group?`,
+      onConfirm: async () => {
+        const { error } = await supabase.rpc("remove_group_member", {
+          p_group_id: selectedGroup.id,
+          p_user_id: memberId,
+        });
+        
+        if (!error) {
+          // Refresh group members
+          openGroupDrawer(selectedGroup);
+        }
+        setConfirmModal({ isOpen: false, title: "", message: "", onConfirm: () => {} });
+      },
     });
   };
   
@@ -655,9 +695,19 @@ export function GroupsSection({ user }: GroupsSectionProps) {
                               </p>
                             </div>
                           </div>
-                          {member.user_id === selectedGroup.created_by && (
-                            <Badge variant="secondary" size="sm">Owner</Badge>
-                          )}
+                          <div className="flex items-center gap-2">
+                            {member.user_id === selectedGroup.created_by ? (
+                              <Badge variant="secondary" size="sm">Owner</Badge>
+                            ) : selectedGroup.created_by === user.id ? (
+                              <Button
+                                variant="danger"
+                                size="sm"
+                                onClick={() => removeMember(member.user_id)}
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            ) : null}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -798,6 +848,16 @@ export function GroupsSection({ user }: GroupsSectionProps) {
           </>
         )}
       </AnimatePresence>
+      
+      {/* Confirm Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal({ isOpen: false, title: "", message: "", onConfirm: () => {} })}
+        onConfirm={confirmModal.onConfirm}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        variant="danger"
+      />
     </section>
   );
 }

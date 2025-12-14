@@ -5,3 +5,4 @@ export { Skeleton, SkeletonCard, SkeletonList } from "./Skeleton";
 export { Input, Textarea } from "./Input";
 export { Avatar, AvatarStack } from "./Avatar";
 export { StarRating, StarRatingDisplay } from "./StarRating";
+export { ConfirmModal } from "./ConfirmModal";
