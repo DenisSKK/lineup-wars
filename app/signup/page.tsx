@@ -4,8 +4,9 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-
-export const dynamic = 'force-dynamic'
+import { motion } from 'framer-motion'
+import { Mail, Lock, User, ArrowLeft } from 'lucide-react'
+import { Button, Card, Input } from '@/components/ui'
 
 export default function SignupPage() {
   const [email, setEmail] = useState('')
@@ -35,7 +36,7 @@ export default function SignupPage() {
       if (error) {
         setError(error.message)
       } else {
-        router.push('/festivals')
+        router.push('/')
         router.refresh()
       }
     } catch {
@@ -46,87 +47,130 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-500">
-      <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
-          Lineup Wars
-        </h1>
-        <h2 className="text-xl font-semibold text-center mb-6 text-gray-600">
-          Create Account
-        </h2>
-
-        {error && (
-          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            {error}
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
+      <div
+        className="absolute inset-0 opacity-60"
+        style={{ background: "var(--gradient-mesh)" }}
+      />
+      
+      {/* Animated Background Elements */}
+      <motion.div
+        className="absolute -top-1/4 -right-1/4 w-1/2 h-1/2 rounded-full bg-[var(--accent-secondary)]/10 blur-3xl"
+        animate={{
+          x: [0, -100, 0],
+          y: [0, 50, 0],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+      />
+      <motion.div
+        className="absolute -bottom-1/4 -left-1/4 w-1/2 h-1/2 rounded-full bg-[var(--accent-primary)]/10 blur-3xl"
+        animate={{
+          x: [0, 100, 0],
+          y: [0, -50, 0],
+        }}
+        transition={{
+          duration: 25,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+      />
+      
+      {/* Content */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="relative z-10 w-full max-w-md mx-4"
+      >
+        {/* Back Link */}
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-[var(--foreground-muted)] hover:text-[var(--foreground)] mb-6 transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Home
+        </Link>
+        
+        <Card variant="glass" padding="lg">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-[var(--foreground)] mb-2">
+              🎸 Lineup Wars
+            </h1>
+            <p className="text-[var(--foreground-muted)]">
+              Create your account
+            </p>
           </div>
-        )}
 
-        <form onSubmit={handleSignup} className="space-y-4">
-          <div>
-            <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name
-            </label>
-            <input
-              id="fullName"
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 p-4 rounded-lg bg-[var(--accent-error)]/10 border border-[var(--accent-error)]/20 text-[var(--accent-error)]"
+            >
+              {error}
+            </motion.div>
+          )}
+
+          <form onSubmit={handleSignup} className="space-y-5">
+            <Input
+              label="Full Name"
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900"
               placeholder="John Doe"
+              icon={<User className="h-5 w-5" />}
             />
-          </div>
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              id="email"
+            <Input
+              label="Email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900"
               placeholder="you@example.com"
+              icon={<Mail className="h-5 w-5" />}
             />
+
+            <div>
+              <Input
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+                icon={<Lock className="h-5 w-5" />}
+              />
+              <p className="mt-1.5 text-xs text-[var(--foreground-subtle)]">
+                Password must be at least 6 characters
+              </p>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              isLoading={loading}
+            >
+              Create Account
+            </Button>
+          </form>
+
+          <div className="mt-6 text-center text-sm text-[var(--foreground-muted)]">
+            Already have an account?{' '}
+            <Link href="/login" className="text-[var(--accent-primary)] hover:text-[var(--accent-primary-hover)] font-medium">
+              Sign In
+            </Link>
           </div>
-
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900"
-              placeholder="••••••••"
-            />
-            <p className="mt-1 text-xs text-gray-500">
-              Password must be at least 6 characters
-            </p>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {loading ? 'Creating account...' : 'Sign Up'}
-          </button>
-        </form>
-
-        <div className="mt-6 text-center text-sm text-gray-600">
-          Already have an account?{' '}
-          <Link href="/login" className="text-purple-600 hover:text-purple-700 font-medium">
-            Sign In
-          </Link>
-        </div>
-      </div>
+        </Card>
+      </motion.div>
     </div>
   )
 }
