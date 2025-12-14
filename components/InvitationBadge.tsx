@@ -9,8 +9,10 @@ export default function InvitationBadge() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    const supabase = createClient()
+    let channel: ReturnType<typeof supabase.channel> | null = null
+
     const fetchCount = async () => {
-      const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
 
       if (!user) {
@@ -30,27 +32,37 @@ export default function InvitationBadge() {
       setLoading(false)
     }
 
-    fetchCount()
+    const setupSubscription = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
 
-    // Set up real-time subscription for invitation updates
-    const supabase = createClient()
-    const channel = supabase
-      .channel('invitations')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'group_invitations',
-        },
-        () => {
-          fetchCount()
-        }
-      )
-      .subscribe()
+      // Set up real-time subscription for invitation updates
+      // Filter to only listen for changes where invited_user_id matches current user
+      // This prevents unnecessary refetches for invitations to other users
+      channel = supabase
+        .channel('user-invitations')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'group_invitations',
+            filter: `invited_user_id=eq.${user.id}`,
+          },
+          () => {
+            fetchCount()
+          }
+        )
+        .subscribe()
+    }
+
+    fetchCount()
+    setupSubscription()
 
     return () => {
-      supabase.removeChannel(channel)
+      if (channel) {
+        supabase.removeChannel(channel)
+      }
     }
   }, [])
 
