@@ -20,60 +20,56 @@ export function BandRatingCard({
   const [showSpotify, setShowSpotify] = useState(false);
 
   return (
-    <Card variant="default" padding="md">
+    <Card variant="default" padding="md" className="sm:p-4 p-2">
       <div className="flex flex-col gap-4">
         {/* Main Content Row */}
-        <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+        <div className="flex items-start gap-3">
           {/* Band Image */}
           {band.spotify_image_url && (
             <div className="flex-shrink-0">
               <img
                 src={band.spotify_image_url}
                 alt={band.name}
-                className="w-20 h-20 rounded-lg object-cover"
+                className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-cover"
               />
             </div>
           )}
 
           {/* Band Info */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <div className="flex-1">
-                <h4 className="font-semibold text-[var(--foreground)] text-lg">
-                  {band.name}
-                </h4>
-                
-                {/* Spotify Link & Popularity */}
-                <div className="flex items-center gap-2 mt-1">
-                  {band.spotify_url && (
-                    <a
-                      href={band.spotify_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#1DB954] hover:underline text-sm flex items-center gap-1"
-                    >
-                      <Music className="w-3 h-3" />
-                      Spotify
-                    </a>
-                  )}
-                  {band.spotify_popularity !== undefined && band.spotify_popularity !== null && (
-                    <Badge 
-                      variant={
-                        band.spotify_popularity >= 70 ? "default" : 
-                        band.spotify_popularity >= 40 ? "outline" : 
-                        "outline"
-                      }
-                      size="sm"
-                    >
-                      {band.spotify_popularity}% popularity
-                    </Badge>
-                  )}
-                </div>
-              </div>
+            <h4 className="font-semibold text-[var(--foreground)] text-base sm:text-lg">
+              {band.name}
+            </h4>
+            
+            {/* Spotify Link & Popularity */}
+            <div className="flex items-center gap-2 mt-1">
+              {band.spotify_url && (
+                <a
+                  href={band.spotify_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#1DB954] hover:underline text-sm flex items-center gap-1"
+                >
+                  <Music className="w-3 h-3" />
+                  Spotify
+                </a>
+              )}
+              {band.spotify_popularity !== undefined && band.spotify_popularity !== null && (
+                <Badge 
+                  variant={
+                    band.spotify_popularity >= 70 ? "default" : 
+                    band.spotify_popularity >= 40 ? "outline" : 
+                    "outline"
+                  }
+                  size="sm"
+                >
+                  {band.spotify_popularity}% popularity
+                </Badge>
+              )}
             </div>
 
             {/* Genres & Lineup Info */}
-            <div className="flex flex-wrap gap-2 mt-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-2">
               {/* Spotify Genres */}
               {band.spotify_genres && band.spotify_genres.length > 0 && (
                 <>
@@ -105,25 +101,25 @@ export function BandRatingCard({
               )}
             </div>
           </div>
+        </div>
 
-          {/* Star Rating */}
-          <div className="flex flex-col items-end gap-2">
-            <StarRating
-              rating={currentRating || null}
-              onRatingChange={(rating) => onRatingChange(band.id, rating)}
-              size="lg"
-            />
-            
-            {/* Show Spotify Player Button */}
-            {band.spotify_id && (
-              <button
-                onClick={() => setShowSpotify(!showSpotify)}
-                className="px-3 py-1.5 text-xs font-medium rounded-md bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--muted)] transition-colors"
-              >
-                {showSpotify ? "Hide songs" : "Preview songs"}
-              </button>
-            )}
-          </div>
+        {/* Star Rating & Preview Button */}
+        <div className="flex items-center justify-between gap-2">
+          <StarRating
+            rating={currentRating || null}
+            onRatingChange={(rating) => onRatingChange(band.id, rating)}
+            size="lg"
+          />
+          
+          {/* Show Spotify Player Button */}
+          {band.spotify_id && (
+            <button
+              onClick={() => setShowSpotify(!showSpotify)}
+              className="px-2 py-2 sm:px-3 sm:py-1.5 text-xs font-medium rounded-md bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--muted)] transition-colors whitespace-nowrap flex-shrink-0"
+            >
+              {showSpotify ? "Hide" : "Preview"}
+            </button>
+          )}
         </div>
 
         {/* Spotify Embed Player */}

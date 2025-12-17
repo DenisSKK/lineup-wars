@@ -70,7 +70,7 @@ export function FestivalDetailDrawer({
         </div>
         
         {/* Drawer Content */}
-        <div className="p-6">
+        <div className="p-6 px-1.5 sm:px-6">
           {!isAuthenticated ? (
             <div className="text-center py-12">
               <p className="text-[var(--foreground-muted)] mb-4">
