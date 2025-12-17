@@ -69,7 +69,7 @@ export function HeroSection({ user }: HeroSectionProps) {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden pb-20 sm:pb-24"
     >
       {/* Background Gradient Mesh */}
       <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
@@ -212,7 +212,7 @@ export function HeroSection({ user }: HeroSectionProps) {
       
       {/* Scroll Indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="relative mt-12 flex justify-center md:mt-0 md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5, duration: 0.5 }}
