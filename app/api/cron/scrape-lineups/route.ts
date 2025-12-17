@@ -48,10 +48,11 @@ export async function GET(request: Request) {
   const limitParam = url.searchParams.get('limit')
   const limit = limitParam ? Number(limitParam) : undefined
 
-  const festivalParam = url.searchParams.get('festival')?.toLowerCase() as FestivalId | undefined
-  const targets = festivalParam
-    ? FESTIVALS.filter((f) => f.id === festivalParam)
-    : FESTIVALS
+  const festivalParam = url.searchParams.get('festival')?.toLowerCase()
+  const targets =
+    festivalParam && festivalParam !== 'all'
+      ? FESTIVALS.filter((f) => f.id === festivalParam)
+      : FESTIVALS
 
   if (!targets.length) {
     return NextResponse.json({ error: 'Unknown festival param' }, { status: 400 })
