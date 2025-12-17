@@ -1,5 +1,7 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
 // Temporary playground to probe selectors for Rock for People and Nova Rock.
 // Run with: pnpm tsx scripts/scraper-playground.ts --festival rfp|novarock|all [--limit 10] [--pretty]
@@ -16,12 +18,14 @@ type ArtistSelectors = {
 type FestivalConfig = {
   id: FestivalId;
   name: string;
-  indexUrl: string;
+  indexUrls: string[];
   baseUrl: string;
   linkSelector: string;
   linkAllowPattern?: RegExp;
   linkDenyPattern?: RegExp;
   artistSelectors: ArtistSelectors;
+  storageFile: string;
+  detailsFile: string;
 };
 
 type ArtistRow = {
@@ -35,22 +39,37 @@ type ArtistRow = {
   time?: string;
 };
 
+type ArtistDetails = {
+  festival: FestivalId;
+  url: string;
+  slug: string;
+  name?: string;
+  country?: string;
+  day?: string;
+  stage?: string;
+  time?: string;
+};
+
 type ScrapeResult = {
   festival: FestivalId;
   totalLinks: number;
   scraped: ArtistRow[];
   failures: Array<{ url: string; reason: string }>;
+  savedLinksFile?: string;
+  savedDetailsFile?: string;
 };
 
 const FESTIVALS: FestivalConfig[] = [
   {
     id: 'rfp',
     name: 'Rock for People 2025',
-    indexUrl: 'https://rockforpeople.cz/lineup/',
+    indexUrls: ['https://rockforpeople.cz/lineup/'],
     baseUrl: 'https://rockforpeople.cz',
     linkSelector: 'a[href*="/lineup/"]',
     linkAllowPattern: /\/lineup\/[^\/]+\/?$/,
     linkDenyPattern: /\/(en\/)?lineup\/?$/,
+    storageFile: 'rfp-links.json',
+    detailsFile: 'rfp-details.json',
     // TODO: refine selectors after first run
     artistSelectors: {
       name: 'h1',
@@ -62,10 +81,17 @@ const FESTIVALS: FestivalConfig[] = [
   {
     id: 'novarock',
     name: 'Nova Rock 2025',
-    indexUrl: 'https://www.novarock.at/en/lineup/',
+    indexUrls: [
+      'https://www.novarock.at/en/lineup/#tab-2026-06-11',
+      'https://www.novarock.at/en/lineup/#tab-2026-06-12',
+      'https://www.novarock.at/en/lineup/#tab-2026-06-13',
+      'https://www.novarock.at/en/lineup/#tab-2026-06-14',
+    ],
     baseUrl: 'https://www.novarock.at',
-    linkSelector: 'a[href*="/en/artist/"]',
-    linkAllowPattern: /\/en\/artist\/[A-Za-z0-9-]+\/?$/,
+    linkSelector: 'a[href*="/artist/"]',
+    linkAllowPattern: /\/(en\/)?artist\/[A-Za-z0-9-]+\/?$/,
+    storageFile: 'novarock-links.json',
+    detailsFile: 'novarock-details.json',
     // TODO: refine selectors after first run
     artistSelectors: {
       name: 'h1, .artist-title',
@@ -142,22 +168,30 @@ async function scrapeArtist(
   const $ = cheerio.load(html);
   const pick = (sel?: string) => normalizeText(sel ? $(sel).first().text() : undefined);
   const { name, country } = splitNameAndCountry(pick(selectors.name));
+  const textBlob = normalizeText($.root().text()) ?? '';
+  const parsedMeta =
+    festival === 'rfp'
+      ? parseRfpDateStageTime(textBlob)
+      : parseNovaRockDateStageTime(textBlob);
+  const stageRaw = pick(selectors.stage) ?? parsedMeta.stage;
+  const timeRaw = pick(selectors.time) ?? parsedMeta.time;
   return {
     festival,
     url,
     slug: extractSlug(url),
     name,
     country,
-    day: pick(selectors.day),
-    stage: pick(selectors.stage),
-    time: pick(selectors.time),
+    day: pick(selectors.day) ?? parsedMeta.day,
+    stage: sanitizeStage(stageRaw) ?? 'TBA',
+    time: sanitizeTime(timeRaw) ?? 'TBA',
   };
 }
 
 async function scrapeFestival(config: FestivalConfig, limit?: number): Promise<ScrapeResult> {
-  const indexHtml = await fetchHtml(config.indexUrl);
-  const links = collectLinks(indexHtml, config);
-  const slice = typeof limit === 'number' ? links.slice(0, limit) : links;
+  const indexHtmls = await Promise.all(config.indexUrls.map(fetchHtml));
+  const links = indexHtmls.flatMap((html) => collectLinks(html, config));
+  const uniqueLinks = Array.from(new Set(links));
+  const slice = typeof limit === 'number' ? uniqueLinks.slice(0, limit) : uniqueLinks;
 
   const scraped: ArtistRow[] = [];
   const failures: Array<{ url: string; reason: string }> = [];
@@ -173,7 +207,124 @@ async function scrapeFestival(config: FestivalConfig, limit?: number): Promise<S
     await sleep(200);
   }
 
-  return { festival: config.id, totalLinks: links.length, scraped, failures };
+  // Merge links into storage file (URL list), keeping existing and adding new.
+  const storagePath = path.join(process.cwd(), 'data', config.storageFile);
+  const existing = (await readJson<string[]>(storagePath)) ?? [];
+  const merged = Array.from(new Set([...existing, ...uniqueLinks]));
+  await writeJson(storagePath, merged);
+
+  // Detail scrape: read full link list (merged) and fetch details.
+  const detailLinks = merged;
+  const details: ArtistDetails[] = [];
+  const existingDetailsPath = path.join(process.cwd(), 'data', config.detailsFile);
+  const existingDetails = (await readJson<ArtistDetails[]>(existingDetailsPath)) ?? [];
+  const detailLimit = typeof limit === 'number' ? limit : undefined;
+  const detailSlice = typeof detailLimit === 'number' ? detailLinks.slice(0, detailLimit) : detailLinks;
+
+  for (const url of detailSlice) {
+    try {
+      const row = await scrapeArtist(config.id, url, config.artistSelectors);
+      if (!row.slug) continue;
+      details.push({
+        festival: row.festival,
+        url: row.url,
+        slug: row.slug,
+        name: row.name,
+        country: row.country,
+        day: row.day,
+        stage: row.stage,
+        time: row.time,
+      });
+    } catch (err) {
+      const reason = err instanceof Error ? err.message : 'unknown error';
+      failures.push({ url, reason });
+    }
+    await sleep(200);
+  }
+
+  // Merge details by slug (prefer newest)
+  const detailMap = new Map<string, ArtistDetails>();
+  for (const d of existingDetails) {
+    detailMap.set(d.slug, d);
+  }
+  for (const d of details) {
+    detailMap.set(d.slug, { ...detailMap.get(d.slug), ...d });
+  }
+  const mergedDetails = Array.from(detailMap.values());
+  await writeJson(existingDetailsPath, mergedDetails);
+
+  return {
+    festival: config.id,
+    totalLinks: uniqueLinks.length,
+    scraped,
+    failures,
+    savedLinksFile: storagePath,
+    savedDetailsFile: existingDetailsPath,
+  };
+}
+
+async function readJson<T>(filePath: string): Promise<T | undefined> {
+  try {
+    const data = await fs.readFile(filePath, 'utf8');
+    return JSON.parse(data) as T;
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') return undefined;
+    throw err;
+  }
+}
+
+async function writeJson(filePath: string, data: unknown) {
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
+  await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf8');
+}
+
+function parseRfpDateStageTime(text: string): { day?: string; stage?: string; time?: string } {
+  const normalized = normalizeText(text) ?? '';
+  const dayMatch = normalized.match(
+    /(Pondělí|Úterý|Středa|Čtvrtek|Pátek|Sobota|Neděle|Mon|Tue|Wed|Thu|Fri|Sat|Sun)[^\d]{0,10}\s?(\d{1,2}\.\s*\d{1,2}\.)/i,
+  );
+  const day = dayMatch ? dayMatch[0] : undefined;
+  // RFP site currently does not expose stage/time per artist; leave undefined to avoid false positives.
+  return { day, stage: undefined, time: undefined };
+}
+
+function parseNovaRockDateStageTime(text: string): { day?: string; stage?: string; time?: string } {
+  const normalized = normalizeText(text) ?? '';
+  const blockMatch = normalized.match(/SHOW DAY\s+([^\n]+?)\s+STAGE\s+([^\n]+?)\s+STAGE TIME\s+([^\n]+)/i);
+  if (blockMatch) {
+    return {
+      day: normalizeText(blockMatch[1]),
+      stage: normalizeText(blockMatch[2]),
+      time: normalizeText(blockMatch[3]),
+    };
+  }
+  // fallback: look for date and time separately
+  const dayMatch = normalized.match(/(Mon|Tue|Wed|Thu|Fri|Sat|Sun)[^\d]{0,10}\s?\d{1,2}\.\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)/i);
+  const timeMatch = normalized.match(/(\d{1,2}:\d{2})/);
+  const stageMatch = normalized.match(/STAGE\s+([A-Za-z0-9\- ]{2,40})/i);
+  return {
+    day: dayMatch ? dayMatch[0] : undefined,
+    stage: stageMatch ? normalizeText(stageMatch[1]) : undefined,
+    time: timeMatch ? timeMatch[1] : undefined,
+  };
+}
+
+function sanitizeStage(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  const clean = normalizeText(value);
+  if (!clean) return undefined;
+  if (/event-card/i.test(clean)) return undefined;
+  if (/^tba$/i.test(clean)) return 'TBA';
+  return clean;
+}
+
+function sanitizeTime(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  const clean = normalizeText(value);
+  if (!clean) return undefined;
+  if (/^tba$/i.test(clean)) return 'TBA';
+  const timeMatch = clean.match(/^(\d{1,2}:\d{2})$/);
+  return timeMatch ? timeMatch[1] : undefined;
 }
 
 function parseArg(flag: string): string | undefined {
@@ -191,6 +342,7 @@ async function main() {
   const limitArg = parseArg('--limit');
   const limit = limitArg ? Number(limitArg) : undefined;
   const pretty = parseBool('--pretty');
+  const verbose = parseBool('--verbose');
 
   const targets =
     festivalArg === 'all'
@@ -204,17 +356,22 @@ async function main() {
 
   const results: ScrapeResult[] = [];
   for (const festival of targets) {
-    console.error(`Scraping ${festival.name} (${festival.id})...`);
+    if (verbose) {
+      console.error(`Scraping ${festival.name} (${festival.id})...`);
+    }
     const result = await scrapeFestival(festival, limit);
     results.push(result);
-    console.error(
-      `Done ${festival.id}: ${result.scraped.length} rows (links found: ${result.totalLinks}, failures: ${result.failures.length})`,
-    );
+    if (verbose) {
+      console.error(
+        `Done ${festival.id}: links=${result.totalLinks}, scraped=${result.scraped.length}, failures=${result.failures.length}, linksFile=${result.savedLinksFile}, detailsFile=${result.savedDetailsFile}`,
+      );
+    } else {
+      console.error(`Done ${festival.id}: links=${result.totalLinks}, failures=${result.failures.length}`);
+    }
   }
 
   const output = { timestamp: new Date().toISOString(), festivals: results };
   const json = pretty ? JSON.stringify(output, null, 2) : JSON.stringify(output);
-  console.log(json);
 }
 
 main().catch((err) => {

@@ -1,0 +1,522 @@
+[
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/gorillaz/",
+    "slug": "gorillaz",
+    "name": "Gorillaz",
+    "country": "UK",
+    "day": "Středa 10. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/limp-bizkit/",
+    "slug": "limp-bizkit",
+    "name": "Limp Bizkit",
+    "country": "US",
+    "day": "Čtvrtek 11. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/bring-me-the-horizon/",
+    "slug": "bring-me-the-horizon",
+    "name": "Bring Me The Horizon",
+    "country": "UK",
+    "day": "Pátek 12. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/halsey/",
+    "slug": "halsey",
+    "name": "Halsey",
+    "country": "US",
+    "day": "Sobota 13. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/iron-maiden/",
+    "slug": "iron-maiden",
+    "name": "Iron Maiden",
+    "country": "UK",
+    "day": "Neděle 14. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/electric-callboy/",
+    "slug": "electric-callboy",
+    "name": "Electric Callboy",
+    "country": "DE",
+    "day": "Středa 10. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/papa-roach/",
+    "slug": "papa-roach",
+    "name": "Papa Roach",
+    "country": "US",
+    "day": "Čtvrtek 11. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/three-days-grace/",
+    "slug": "three-days-grace",
+    "name": "Three Days Grace",
+    "country": "CA",
+    "day": "Pátek 12. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/alter-bridge/",
+    "slug": "alter-bridge",
+    "name": "Alter Bridge",
+    "country": "US",
+    "day": "Neděle 14. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/a-day-to-remember/",
+    "slug": "a-day-to-remember",
+    "name": "A Day To Remember",
+    "country": "US",
+    "day": "Pátek 12. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/babymetal/",
+    "slug": "babymetal",
+    "name": "BABYMETAL",
+    "country": "JP",
+    "day": "Čtvrtek 11. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/bilmuri/",
+    "slug": "bilmuri",
+    "name": "Bilmuri",
+    "country": "US",
+    "day": "Pátek 12. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/breaking-benjamin/",
+    "slug": "breaking-benjamin",
+    "name": "Breaking Benjamin",
+    "country": "US",
+    "day": "Čtvrtek 11. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/megadeth/",
+    "slug": "megadeth",
+    "name": "Megadeth",
+    "country": "US",
+    "day": "Středa 10. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/nothing-but-thieves/",
+    "slug": "nothing-but-thieves",
+    "name": "Nothing But Thieves",
+    "country": "UK",
+    "day": "Sobota 13. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/queensryche/",
+    "slug": "queensryche",
+    "name": "Queensrÿche",
+    "country": "US",
+    "day": "Neděle 14. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/social-distortion/",
+    "slug": "social-distortion",
+    "name": "Social Distortion",
+    "country": "US",
+    "day": "Čtvrtek 11. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/the-all-american-rejects/",
+    "slug": "the-all-american-rejects",
+    "name": "The All-American Rejects",
+    "country": "US",
+    "day": "Čtvrtek 11. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/the-pretty-reckless/",
+    "slug": "the-pretty-reckless",
+    "name": "The Pretty Reckless",
+    "country": "US",
+    "day": "Středa 10. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/trivium/",
+    "slug": "trivium",
+    "name": "Trivium",
+    "country": "US",
+    "day": "Středa 10. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/within-temptation/",
+    "slug": "within-temptation",
+    "name": "Within Temptation",
+    "country": "NL",
+    "day": "Sobota 13. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/wolf-alice/",
+    "slug": "wolf-alice",
+    "name": "Wolf Alice",
+    "country": "UK",
+    "day": "Pátek 12. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/alessi-rose/",
+    "slug": "alessi-rose",
+    "name": "Alessi Rose",
+    "country": "UK",
+    "day": "Sobota 13. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/alice/",
+    "slug": "alice",
+    "name": "Alice & Dan Bárta",
+    "country": "CZ",
+    "day": "Neděle 14. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/badflower/",
+    "slug": "badflower",
+    "name": "Badflower",
+    "country": "US",
+    "day": "Sobota 13. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/basement/",
+    "slug": "basement",
+    "name": "Basement",
+    "country": "UK",
+    "day": "Pátek 12. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/blood-incantation/",
+    "slug": "blood-incantation",
+    "name": "Blood Incantation",
+    "country": "US",
+    "day": "Čtvrtek 11. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/bury-tomorrow/",
+    "slug": "bury-tomorrow",
+    "name": "Bury Tomorrow",
+    "country": "UK",
+    "day": "Sobota 13. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/don-broco/",
+    "slug": "don-broco",
+    "name": "Don Broco",
+    "country": "UK",
+    "day": "Sobota 13. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/gatecreeper/",
+    "slug": "gatecreeper",
+    "name": "Gatecreeper",
+    "country": "US",
+    "day": "Pátek 12. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/joey-valence-brae/",
+    "slug": "joey-valence-brae",
+    "name": "Joey Valence & Brae",
+    "country": "US",
+    "day": "Středa 10. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/kublai-khan-tx/",
+    "slug": "kublai-khan-tx",
+    "name": "Kublai Khan TX",
+    "country": "US",
+    "day": "Středa 10. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/letlive/",
+    "slug": "letlive",
+    "name": "letlive.",
+    "country": "US",
+    "day": "Středa 10. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/lottery-winners/",
+    "slug": "lottery-winners",
+    "name": "Lottery Winners",
+    "country": "UK",
+    "day": "Pátek 12. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/magnolia-park/",
+    "slug": "magnolia-park",
+    "name": "Magnolia Park",
+    "country": "US",
+    "day": "Čtvrtek 11. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/malevolence/",
+    "slug": "malevolence",
+    "name": "Malevolence",
+    "country": "UK",
+    "day": "Sobota 13. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/mammoth/",
+    "slug": "mammoth",
+    "name": "Mammoth",
+    "country": "US",
+    "day": "Pátek 12. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/melrose-avenue/",
+    "slug": "melrose-avenue",
+    "name": "Melrose Avenue",
+    "country": "AU",
+    "day": "Čtvrtek 11. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/president/",
+    "slug": "president",
+    "name": "PRESIDENT",
+    "country": "UK",
+    "day": "Sobota 13. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/sofian-medjmedj/",
+    "slug": "sofian-medjmedj",
+    "name": "Sofian Medjmedj",
+    "country": "CZ",
+    "day": "Sobota 13. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/static-x/",
+    "slug": "static-x",
+    "name": "Static-X",
+    "country": "US",
+    "day": "Středa 10. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/the-plot-in-you/",
+    "slug": "the-plot-in-you",
+    "name": "The Plot In You",
+    "country": "US",
+    "day": "Čtvrtek 11. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/the-royston-club/",
+    "slug": "the-royston-club",
+    "name": "The Royston Club",
+    "country": "UK",
+    "day": "Čtvrtek 11. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/thornhill/",
+    "slug": "thornhill",
+    "name": "Thornhill",
+    "country": "AU",
+    "day": "Čtvrtek 11. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/thrown/",
+    "slug": "thrown",
+    "name": "thrown",
+    "country": "SE",
+    "day": "Středa 10. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/unpeople/",
+    "slug": "unpeople",
+    "name": "unpeople",
+    "country": "UK",
+    "day": "Pátek 12. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/vianova/",
+    "slug": "vianova",
+    "name": "vianova",
+    "country": "DE",
+    "day": "Neděle 14. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/voila/",
+    "slug": "voila",
+    "name": "VOILÀ",
+    "country": "US",
+    "day": "Středa 10. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/wohnout/",
+    "slug": "wohnout",
+    "name": "Wohnout",
+    "country": "CZ",
+    "day": "Čtvrtek 11. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/yard-act/",
+    "slug": "yard-act",
+    "name": "Yard Act",
+    "country": "UK",
+    "day": "Čtvrtek 11. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/yonaka/",
+    "slug": "yonaka",
+    "name": "Yonaka",
+    "country": "UK",
+    "day": "Sobota 13. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/zero-936/",
+    "slug": "zero-936",
+    "name": "Zero 9:36",
+    "country": "US",
+    "day": "Pátek 12. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  }
+]
