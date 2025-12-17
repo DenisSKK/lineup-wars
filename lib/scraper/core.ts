@@ -51,6 +51,7 @@ const FESTIVAL_PARSERS: Record<FestivalId, DateStageTimeParser> = {
 }
 
 const DEFAULT_DELAY_MS = 200
+const DEFAULT_TBA_VALUE = 'TBA'
 
 export async function scrapeFestival(
   config: FestivalConfig,
@@ -108,8 +109,8 @@ export async function scrapeArtist(
     name,
     country,
     day: pick(selectors.day) ?? parsedMeta.day,
-    stage: sanitizeStage(stageRaw) ?? 'TBA',
-    time: sanitizeTime(timeRaw) ?? 'TBA',
+    stage: sanitizeStage(stageRaw) ?? DEFAULT_TBA_VALUE,
+    time: sanitizeTime(timeRaw) ?? DEFAULT_TBA_VALUE,
   }
 }
 
@@ -202,7 +203,7 @@ export function sanitizeStage(value: string | undefined): string | undefined {
   const clean = normalizeText(value)
   if (!clean) return undefined
   if (/event-card/i.test(clean)) return undefined
-  if (/^tba$/i.test(clean)) return 'TBA'
+  if (/^tba$/i.test(clean)) return DEFAULT_TBA_VALUE
   return clean
 }
 
@@ -210,7 +211,7 @@ export function sanitizeTime(value: string | undefined): string | undefined {
   if (!value) return undefined
   const clean = normalizeText(value)
   if (!clean) return undefined
-  if (/^tba$/i.test(clean)) return 'TBA'
+  if (/^tba$/i.test(clean)) return DEFAULT_TBA_VALUE
   const timeMatch = clean.match(/^(\d{1,2}:\d{2})$/)
   return timeMatch ? timeMatch[1] : undefined
 }
