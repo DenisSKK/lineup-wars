@@ -16,6 +16,8 @@ type UpsertResult = {
   scrapedLinks: number
   scrapeFailures: number
   scrapeFailureSamples: Array<{ url: string; reason: string }>
+  upsertFailures: number
+  upsertFailureSamples: Array<{ band: string; reason: string }>
 }
 
 const CRON_SECRET = process.env.CRON_SECRET
@@ -51,6 +53,7 @@ export async function GET(request: Request) {
     let bandsUpdated = 0
     let lineupsUpserted = 0
     let skipped = 0
+    const upsertFailures: Array<{ band: string; reason: string }> = []
 
     for (const detail of scraped.details) {
       if (!detail.name) {
@@ -58,12 +61,17 @@ export async function GET(request: Request) {
         continue
       }
 
-      const { inserted, id: bandId } = await upsertBand(detail)
-      bandsInserted += inserted ? 1 : 0
-      bandsUpdated += inserted ? 0 : 1
+      try {
+        const { inserted, id: bandId } = await upsertBand(detail)
+        bandsInserted += inserted ? 1 : 0
+        bandsUpdated += inserted ? 0 : 1
 
-      await upsertLineup(festivalRowId, bandId, detail)
-      lineupsUpserted += 1
+        await upsertLineup(festivalRowId, bandId, detail)
+        lineupsUpserted += 1
+      } catch (error) {
+        const reason = error instanceof Error ? error.message : 'Unknown error'
+        upsertFailures.push({ band: detail.name, reason })
+      }
     }
 
     results.push({
@@ -76,6 +84,8 @@ export async function GET(request: Request) {
       scrapedLinks: scraped.links.length,
       scrapeFailures: scraped.failures.length,
       scrapeFailureSamples: scraped.failures.slice(0, 5),
+      upsertFailures: upsertFailures.length,
+      upsertFailureSamples: upsertFailures.slice(0, 5),
     })
   }
 
