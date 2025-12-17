@@ -21,13 +21,27 @@ type UpsertResult = {
 }
 
 const CRON_SECRET = process.env.CRON_SECRET
+const IS_PRODUCTION = process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production'
 
 export async function GET(request: Request) {
+  // In production, CRON_SECRET must be configured for security
+  if (IS_PRODUCTION && !CRON_SECRET) {
+    console.error('CRON_SECRET is not configured in production environment')
+    return NextResponse.json(
+      { error: 'Service misconfigured - authentication required' },
+      { status: 500 }
+    )
+  }
+
+  // Authenticate the request if CRON_SECRET is set
   if (CRON_SECRET) {
     const authHeader = request.headers.get('authorization')
     if (authHeader !== `Bearer ${CRON_SECRET}`) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
+  } else {
+    // Warn in development if running without authentication
+    console.warn('⚠️  CRON_SECRET not set - endpoint is unprotected (development only)')
   }
 
   const url = new URL(request.url)
