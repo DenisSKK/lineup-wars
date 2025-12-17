@@ -137,7 +137,19 @@ export function BandRatingCard({
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               loading="lazy"
               className="rounded-lg"
+              title={`Spotify player for ${band.name}`}
             />
+            <p className="text-xs text-[var(--muted-foreground)] mt-2">
+              Note: Some artists may restrict playback in embedded players. 
+              <a 
+                href={band.spotify_url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-[#1DB954] hover:underline ml-1"
+              >
+                Open in Spotify
+              </a>
+            </p>
           </div>
         )}
       </div>
