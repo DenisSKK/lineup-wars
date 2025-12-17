@@ -203,7 +203,12 @@ export function sanitizeStage(value: string | undefined): string | undefined {
   if (!value) return undefined
   const clean = normalizeText(value)
   if (!clean) return undefined
+  
+  // Filter out 'event-card' which is an HTML class name that sometimes gets extracted
+  // instead of the actual stage name when the selector matches container elements.
+  // TODO: Consider refining the CSS selectors in festival configs to avoid this at the source.
   if (/event-card/i.test(clean)) return undefined
+  
   if (/^tba$/i.test(clean)) return DEFAULT_TBA_VALUE
   return clean
 }
