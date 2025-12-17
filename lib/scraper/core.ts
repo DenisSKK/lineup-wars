@@ -71,7 +71,8 @@ export async function scrapeFestival(
       const detail = await scrapeArtist(config.id, url, config.artistSelectors)
       details.push(detail)
     } catch (err) {
-      const reason = err instanceof Error ? err.message : 'unknown error'
+      const baseMessage = err instanceof Error ? err.message : String(err)
+      const reason = `Failed to scrape ${url}: ${baseMessage || 'unknown error'}`
       failures.push({ url, reason })
     }
     if (delay > 0) {
