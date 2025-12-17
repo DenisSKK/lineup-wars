@@ -33,15 +33,41 @@ async function writeJson(filePath: string, data: unknown) {
 
 function mergeDetails(existing: ArtistDetails[], incoming: ArtistDetails[]): ArtistDetails[] {
   const map = new Map<string, ArtistDetails>();
+  let skippedCount = 0;
+
+  // Helper to generate a key with fallback: slug > url > name
+  const getKey = (detail: ArtistDetails): string | undefined => {
+    if (detail.slug) return detail.slug;
+    if (detail.url) return detail.url;
+    if (detail.name) return `name:${detail.name}`;
+    return undefined;
+  };
+
   for (const detail of existing) {
-    if (!detail.slug) continue;
-    map.set(detail.slug, detail);
+    const key = getKey(detail);
+    if (!key) {
+      skippedCount++;
+      console.warn(`⚠️  Skipping existing detail without slug/url/name:`, detail);
+      continue;
+    }
+    map.set(key, detail);
   }
+
   for (const detail of incoming) {
-    if (!detail.slug) continue;
-    const previous = map.get(detail.slug) ?? {};
-    map.set(detail.slug, { ...previous, ...detail });
+    const key = getKey(detail);
+    if (!key) {
+      skippedCount++;
+      console.warn(`⚠️  Skipping incoming detail without slug/url/name:`, detail);
+      continue;
+    }
+    const previous = map.get(key) ?? {};
+    map.set(key, { ...previous, ...detail });
   }
+
+  if (skippedCount > 0) {
+    console.warn(`⚠️  Total details skipped due to missing identifiers: ${skippedCount}`);
+  }
+
   return Array.from(map.values());
 }
 
