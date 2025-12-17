@@ -57,7 +57,6 @@ export interface BandRating {
   id: string
   user_id: string
   band_id: string
-  festival_id: string
   rating: number
   created_at: string
   updated_at: string

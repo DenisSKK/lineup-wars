@@ -118,7 +118,7 @@ The initial schema includes:
 - **festivals**: Festival information
 - **bands**: Band information
 - **lineups**: Festival lineups (bands performing at festivals)
-- **band_ratings**: User ratings for bands at festivals
+- **band_ratings**: User ratings for bands (universal ratings, not festival-specific)
 - **groups**: User groups for collaborative rating
 - **group_members**: Group membership tracking
 - **user_festivals**: User's selected festivals

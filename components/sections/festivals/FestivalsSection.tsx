@@ -92,8 +92,7 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
       const { data: ratings } = await supabase
         .from("band_ratings")
         .select("band_id, rating")
-        .eq("user_id", user.id)
-        .eq("festival_id", festival.id);
+        .eq("user_id", user.id);
       
       if (ratings) {
         const ratingsMap = new Map<string, number>();
@@ -120,10 +119,9 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
       .upsert({
         user_id: user.id,
         band_id: bandId,
-        festival_id: selectedFestival.id,
         rating,
       }, {
-        onConflict: "user_id,band_id,festival_id",
+        onConflict: "user_id,band_id",
       });
     
     // Select festival if not already selected

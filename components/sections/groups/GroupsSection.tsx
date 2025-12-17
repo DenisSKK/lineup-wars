@@ -186,10 +186,10 @@ export function GroupsSection({ user }: GroupsSectionProps) {
     
     const memberIds = members.map((m: { user_id: string }) => m.user_id);
     
-    // Get all festivals with ratings from group members
+    // Get all festivals with lineups and ratings from group members
     const { data: festivals } = await supabase
       .from("festivals")
-      .select("*");
+      .select("*, lineups(band_id)");
     
     const { data: ratings } = await supabase
       .from("band_ratings")
@@ -209,8 +209,14 @@ export function GroupsSection({ user }: GroupsSectionProps) {
     const festivalRankings: FestivalRanking[] = [];
     
     for (const festival of festivals) {
+      // Get band IDs for this festival from lineups
+      const festivalBandIds = new Set(
+        festival.lineups?.map((l: { band_id: string }) => l.band_id) || []
+      );
+      
+      // Filter ratings for bands in this festival
       const festivalRatings = ratings.filter(
-        (r: { festival_id: string }) => r.festival_id === festival.id
+        (r: { band_id: string }) => festivalBandIds.has(r.band_id)
       );
       
       if (festivalRatings.length === 0) continue;
