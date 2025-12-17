@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "scraper:playground": "tsx scripts/scraper-playground.ts",
     "supabase": "supabase",
     "db:migration:new": "timestamp=$(date -u +%Y%m%d%H%M%S) && read -p 'Migration name: ' name && touch supabase/migrations/${timestamp}_${name}.sql && echo \"Created supabase/migrations/${timestamp}_${name}.sql\"",
     "db:migration:list": "ls -1 supabase/migrations/",
@@ -15,10 +16,12 @@
     "db:link": "supabase link"
   },
   "dependencies": {
+    "axios": "^1.7.9",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.87.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.26",
+    "cheerio": "^1.0.0-rc.12",
     "lucide-react": "^0.561.0",
     "next": "16.0.8",
     "react": "19.2.1",
@@ -33,6 +36,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.0.8",
+    "tsx": "^4.7.1",
     "supabase": "^2.65.8",
     "tailwindcss": "^4",
     "typescript": "^5"
