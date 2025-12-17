@@ -142,9 +142,9 @@ async function seed({ festival }: SeedOptions): Promise<SeedCounters> {
   const targets = festival === 'all' ? (['rfp', 'novarock'] as FestivalId[]) : [festival]
   const counters: SeedCounters = { bandsInserted: 0, bandsUpdated: 0, lineupsUpserted: 0, skipped: 0 }
 
-  for (const id of targets) {
-    const festivalId = await ensureFestival(id)
-    const details = await loadDetails(id)
+  for (const festivalConfigId of targets) {
+    const festivalId = await ensureFestival(festivalConfigId)
+    const details = await loadDetails(festivalConfigId)
 
     for (const detail of details) {
       if (!detail.name) {
