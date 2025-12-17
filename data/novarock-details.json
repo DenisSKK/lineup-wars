@@ -1,0 +1,696 @@
+[
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/bad-omens/",
+    "slug": "bad-omens",
+    "name": "Bad Omens",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/kaleo/",
+    "slug": "kaleo",
+    "name": "Kaleo",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/trivium/",
+    "slug": "trivium",
+    "name": "Trivium",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/tom-morello/",
+    "slug": "tom-morello",
+    "name": "Tom Morello",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/black-veil-brides/",
+    "slug": "black-veil-brides",
+    "name": "Black Veil Brides",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/feine-sahne-fischfilet/",
+    "slug": "feine-sahne-fischfilet",
+    "name": "Feine Sahne Fischfilet",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/bilmuri/",
+    "slug": "bilmuri",
+    "name": "Bilmuri",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/static-x/",
+    "slug": "static-x",
+    "name": "Static X",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/lemo/",
+    "slug": "lemo",
+    "name": "Lemo",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/dartagnan/",
+    "slug": "dartagnan",
+    "name": "dArtagnan",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/soft-play/",
+    "slug": "soft-play",
+    "name": "Soft Play",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/return-to-dust/",
+    "slug": "return-to-dust",
+    "name": "Return to Dust",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/ego-kill-talent/",
+    "slug": "ego-kill-talent",
+    "name": "Ego Kill Talent",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/we-came-as-romans/",
+    "slug": "we-came-as-romans",
+    "name": "We Came As Romans",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/snot/",
+    "slug": "snot",
+    "name": "Snot",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/ankor/",
+    "slug": "ankor",
+    "name": "ANKOR",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/aurorawave/",
+    "slug": "aurorawave",
+    "name": "Aurorawave",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/yunger/",
+    "slug": "yunger",
+    "name": "Yunger",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/cassies/",
+    "slug": "cassies",
+    "name": "Cassies",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/the-offspring/",
+    "slug": "the-offspring",
+    "name": "The Offspring",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/ice-nine-kills/",
+    "slug": "ice-nine-kills",
+    "name": "Ice Nine Kills",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/social-distortion/",
+    "slug": "social-distortion",
+    "name": "Social Distortion",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/breaking-benjamin/",
+    "slug": "breaking-benjamin",
+    "name": "Breaking Benjamin",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/the-pretty-reckless/",
+    "slug": "the-pretty-reckless",
+    "name": "The Pretty Reckless",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/the-plot-in-you/",
+    "slug": "the-plot-in-you",
+    "name": "THE PLOT IN YOU",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/royal-republic/",
+    "slug": "royal-republic",
+    "name": "Royal Republic",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/president/",
+    "slug": "president",
+    "name": "President",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/catch-your-breath/",
+    "slug": "catch-your-breath",
+    "name": "Catch Your Breath",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/magnolia-park/",
+    "slug": "magnolia-park",
+    "name": "Magnolia Park",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/black-label-society/",
+    "slug": "black-label-society",
+    "name": "Black Label Society",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/skindred/",
+    "slug": "skindred",
+    "name": "Skindred",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/annisokay/",
+    "slug": "annisokay",
+    "name": "Annisokay",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/quicksand/",
+    "slug": "quicksand",
+    "name": "Quicksand",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/melrose-avenue/",
+    "slug": "melrose-avenue",
+    "name": "Melrose Avenue",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/the-pretty-wild/",
+    "slug": "the-pretty-wild",
+    "name": "The Pretty Wild",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/iron-maiden/",
+    "slug": "iron-maiden",
+    "name": "Iron Maiden",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/a-day-to-remember/",
+    "slug": "a-day-to-remember",
+    "name": "A Day To Remember",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/sabaton/",
+    "slug": "sabaton",
+    "name": "Sabaton",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/alter-bridge/",
+    "slug": "alter-bridge",
+    "name": "Alter Bridge",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/sepultura/",
+    "slug": "sepultura",
+    "name": "Sepultura",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/roy-bianco-und-die-abbrunzati-boys/",
+    "slug": "roy-bianco-und-die-abbrunzati-boys",
+    "name": "Roy Bianco und die Abbrunzati Boys",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/all-time-low/",
+    "slug": "all-time-low",
+    "name": "All Time Low",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/kanonenfieber/",
+    "slug": "kanonenfieber",
+    "name": "Kanonenfieber",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/the-rasmus/",
+    "slug": "the-rasmus",
+    "name": "The Rasmus",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/kublai-khan-tx/",
+    "slug": "kublai-khan-tx",
+    "name": "KUBLAI KHAN",
+    "country": "TX",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/future-palace/",
+    "slug": "future-palace",
+    "name": "Future Palace",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/bad-nerves/",
+    "slug": "bad-nerves",
+    "name": "Bad Nerves",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/querbeat/",
+    "slug": "querbeat",
+    "name": "Querbeat",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/kupfergold/",
+    "slug": "kupfergold",
+    "name": "Kupfergold",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/chuggaboom/",
+    "slug": "chuggaboom",
+    "name": "Chuggaboom",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/a-new-chapter/",
+    "slug": "a-new-chapter",
+    "name": "A New Chapter",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/bring-me-the-horizon/",
+    "slug": "bring-me-the-horizon",
+    "name": "Bring Me The Horizon",
+    "day": "Sun, 14. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/papa-roach/",
+    "slug": "papa-roach",
+    "name": "Papa Roach",
+    "day": "Sun, 14. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/architects/",
+    "slug": "architects",
+    "name": "Architects",
+    "day": "Sun, 14. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/three-days-grace/",
+    "slug": "three-days-grace",
+    "name": "Three Days Grace",
+    "day": "Sun, 14. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/hollywood-undead/",
+    "slug": "hollywood-undead",
+    "name": "Hollywood Undead",
+    "day": "Sun, 14. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/malevolence/",
+    "slug": "malevolence",
+    "name": "Malevolence",
+    "day": "Sun, 14. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/p-o-d/",
+    "slug": "p-o-d",
+    "name": "P.O.D.",
+    "day": "Sun, 14. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/voila/",
+    "slug": "voila",
+    "name": "VOILÀ",
+    "day": "Sun, 14. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/all-them-witches/",
+    "slug": "all-them-witches",
+    "name": "All Them Witches",
+    "day": "Sun, 14. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/slay-squad/",
+    "slug": "slay-squad",
+    "name": "Slay Squad",
+    "day": "Sun, 14. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/en/artist/vinegar-hill/",
+    "slug": "vinegar-hill",
+    "name": "Vinegar Hill",
+    "day": "Sun, 14. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/volbeat/",
+    "slug": "volbeat",
+    "name": "Volbeat",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/sex-pistols-feat-frank-carter/",
+    "slug": "sex-pistols-feat-frank-carter",
+    "name": "Sex Pistols feat. Frank Carter",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/mastodon/",
+    "slug": "mastodon",
+    "name": "Mastodon",
+    "day": "Thu, 11. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/the-cure/",
+    "slug": "the-cure",
+    "name": "The Cure",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/a-perfect-circle/",
+    "slug": "a-perfect-circle",
+    "name": "A Perfect Circle",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/thrown/",
+    "slug": "thrown",
+    "name": "Thrown",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/six-feet-under/",
+    "slug": "six-feet-under",
+    "name": "Six Feet Under",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/just-mustard/",
+    "slug": "just-mustard",
+    "name": "Just Mustard",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/tx2/",
+    "slug": "tx2",
+    "name": "TX2",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/zascha/",
+    "slug": "zascha",
+    "name": "Zascha",
+    "day": "Fri, 12. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/madsen/",
+    "slug": "madsen",
+    "name": "Madsen",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/nickelsdorfer-boehmische/",
+    "slug": "nickelsdorfer-boehmische",
+    "name": "Nickelsdorfer Böhmische",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/lagwagon/",
+    "slug": "lagwagon",
+    "name": "Lagwagon",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/loathe/",
+    "slug": "loathe",
+    "name": "Loathe",
+    "day": "Sat, 13. June",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "novarock",
+    "url": "https://www.novarock.at/artist/drain/",
+    "slug": "drain",
+    "name": "Drain",
+    "day": "Sun, 14. June",
+    "stage": "TBA",
+    "time": "TBA"
+  }
+]
