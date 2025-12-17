@@ -60,6 +60,92 @@ Note from me about LLM's answer: I think it should have separate cron job for sc
 
 ---
 
+## Immediate playground (no cron, no Spotify)
+
+Goal: build a throwaway playground to learn the selectors and payload shape for both sites. Once selectors are solid, we can port into a cron route. Spotify matching stays out until we trust the scraped data.
+
+- Location: `scripts/scraper-playground.ts` (Node/ts-node). Keep it isolated from Next runtime.
+- Inputs: static config for Rock for People and Nova Rock (index URL, base URL, link selector, subpage selectors).
+- Flow:
+  1) Fetch index → collect artist page URLs.
+  2) For each artist page, extract name/day/stage/time (stage/time likely empty on RFP for now).
+  3) Emit JSON to stdout for inspection (no DB writes yet).
+  4) Add a `--festival rfp|novarock|all` flag to focus testing.
+- Libraries: `axios`, `cheerio`, maybe `yargs` for flags (or minimal `process.argv` parsing).
+- Rate limiting: `await sleep(200)` between artist pages.
+- Error handling: log failed URLs with HTTP status; keep going.
+
+### Minimal outline
+
+```ts
+// scripts/scraper-playground.ts
+import axios from 'axios';
+import * as cheerio from 'cheerio';
+
+type Festival = {
+  id: 'rfp' | 'novarock';
+  indexUrl: string;
+  baseUrl: string;
+  linkSelector: string;
+  artistSelectors: {
+    name: string;
+    day: string;
+    stage?: string;
+    time?: string;
+  };
+};
+
+// festival configs go here
+
+async function scrapeFestival(festival: Festival) {
+  const { data } = await axios.get(festival.indexUrl);
+  const $ = cheerio.load(data);
+  const urls = new Set<string>();
+  $(festival.linkSelector).each((_, el) => {
+    const href = $(el).attr('href');
+    if (!href) return;
+    urls.add(href.startsWith('http') ? href : `${festival.baseUrl}${href}`);
+  });
+
+  const results = [] as Array<unknown>;
+  for (const url of urls) {
+    try {
+      const { data: html } = await axios.get(url);
+      const $$ = cheerio.load(html);
+      const text = (sel: string | undefined) => sel ? $$(sel).first().text().trim() || undefined : undefined;
+      results.push({
+        festival: festival.id,
+        url,
+        name: text(festival.artistSelectors.name),
+        day: text(festival.artistSelectors.day),
+        stage: text(festival.artistSelectors.stage),
+        time: text(festival.artistSelectors.time),
+      });
+    } catch (err) {
+      console.error('Failed:', festival.id, url, err);
+    }
+    await new Promise((r) => setTimeout(r, 200));
+  }
+
+  return Array.from(results);
+}
+
+async function main() {
+  // parse argv, pick festivals, run, console.log JSON
+}
+
+main();
+```
+
+### Iteration plan
+
+1) Implement the playground script and wire `pnpm ts-node scripts/scraper-playground.ts --festival rfp` (and `novarock`).
+2) Tweak selectors until we get correct fields for both sites.
+3) Confirm typical counts (RFP: all listed bands; Nova Rock: all listed bands) and spot-check a few entries manually.
+4) Once stable, reuse the same configs in the Next cron route and add DB upserts. Spotify matcher comes after that.
+
+---
+
 ## 1. Vercel Cron Jobs
 
 Vercel supports cron via `vercel.json`:
