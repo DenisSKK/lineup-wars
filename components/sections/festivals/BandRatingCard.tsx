@@ -89,9 +89,9 @@ export function BandRatingCard({
               {band.country && (
                 <Badge variant="outline" size="sm">🌍 {band.country}</Badge>
               )}
-              {lineup.day_label && (
+              {lineup.performance_date && (
                 <Badge variant="outline" size="sm">
-                  📅 {lineup.day_label}
+                  📅 {new Date(lineup.performance_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                 </Badge>
               )}
               {lineup.stage && (
