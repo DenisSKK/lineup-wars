@@ -93,14 +93,21 @@ export function FestivalDetailDrawer({
             </div>
           ) : (
             <div className="space-y-4">
-              {festival.lineups.map((lineup) => (
-                <BandRatingCard
-                  key={lineup.id}
-                  lineup={lineup}
-                  currentRating={userRatings.get(lineup.band.id)}
-                  onRatingChange={onRatingChange}
-                />
-              ))}
+              {[...festival.lineups]
+                .sort((a, b) => {
+                  // Sort by spotify_popularity descending (highest first)
+                  const popularityA = a.band.spotify_popularity ?? -1;
+                  const popularityB = b.band.spotify_popularity ?? -1;
+                  return popularityB - popularityA;
+                })
+                .map((lineup) => (
+                  <BandRatingCard
+                    key={lineup.id}
+                    lineup={lineup}
+                    currentRating={userRatings.get(lineup.band.id)}
+                    onRatingChange={onRatingChange}
+                  />
+                ))}
             </div>
           )}
         </div>
