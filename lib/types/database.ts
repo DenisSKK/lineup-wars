@@ -26,6 +26,13 @@ export interface Band {
   country?: string
   image_url?: string
   description?: string
+  slug?: string
+  festival_urls?: string[]
+  spotify_id?: string
+  spotify_url?: string
+  spotify_image_url?: string
+  spotify_popularity?: number
+  spotify_genres?: string[]
   created_at: string
   updated_at: string
 }
