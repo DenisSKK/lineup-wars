@@ -91,13 +91,17 @@ export function BandRatingCard({
               )}
               
               {band.country && (
-                <Badge variant="outline" size="sm">{band.country}</Badge>
+                <Badge variant="outline" size="sm">🌍 {band.country}</Badge>
               )}
               {lineup.day_number && (
-                <Badge variant="outline" size="sm">Day {lineup.day_number}</Badge>
+                <Badge variant="outline" size="sm">
+                  📅 Day {lineup.day_number}
+                </Badge>
               )}
               {lineup.stage && (
-                <Badge variant="outline" size="sm">{lineup.stage}</Badge>
+                <Badge variant="outline" size="sm">
+                  🎪 {lineup.stage}
+                </Badge>
               )}
             </div>
           </div>
@@ -114,9 +118,9 @@ export function BandRatingCard({
             {band.spotify_id && (
               <button
                 onClick={() => setShowSpotify(!showSpotify)}
-                className="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors"
+                className="px-3 py-1.5 text-xs font-medium rounded-md bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--muted)] transition-colors"
               >
-                {showSpotify ? "Hide" : "Preview"} songs
+                {showSpotify ? "Hide songs" : "Preview songs"}
               </button>
             )}
           </div>
