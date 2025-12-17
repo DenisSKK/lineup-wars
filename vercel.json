@@ -2,8 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/scrape-lineups",
-      "schedule": "0 1 * * *",
-      "schedule_note": "Runs daily at 01:00 UTC (cron format: minute hour day-of-month month day-of-week; timezone: UTC)."
+      "schedule": "0 1 * * *"
     }
   ]
 }
