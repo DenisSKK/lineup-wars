@@ -43,6 +43,13 @@ export type ScrapeResult = {
   failures: ScrapeFailure[]
 }
 
+type DateStageTimeParser = (text: string) => { day?: string; stage?: string; time?: string }
+
+const FESTIVAL_PARSERS: Record<FestivalId, DateStageTimeParser> = {
+  rfp: parseRfpDateStageTime,
+  novarock: parseNovaRockDateStageTime,
+}
+
 const DEFAULT_DELAY_MS = 200
 
 export async function scrapeFestival(
@@ -89,7 +96,8 @@ export async function scrapeArtist(
   const pick = (sel?: string) => normalizeText(sel ? $(sel).first().text() : undefined)
   const { name, country } = splitNameAndCountry(pick(selectors.name))
   const textBlob = normalizeText($.root().text()) ?? ''
-  const parsedMeta = festival === 'rfp' ? parseRfpDateStageTime(textBlob) : parseNovaRockDateStageTime(textBlob)
+  const parser = FESTIVAL_PARSERS[festival]
+  const parsedMeta = parser(textBlob)
   const stageRaw = pick(selectors.stage) ?? parsedMeta.stage
   const timeRaw = pick(selectors.time) ?? parsedMeta.time
 
