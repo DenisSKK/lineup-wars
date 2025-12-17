@@ -89,9 +89,9 @@ export function BandRatingCard({
               {band.country && (
                 <Badge variant="outline" size="sm">🌍 {band.country}</Badge>
               )}
-              {lineup.day_number && (
+              {lineup.day_label && (
                 <Badge variant="outline" size="sm">
-                  📅 Day {lineup.day_number}
+                  📅 {lineup.day_label}
                 </Badge>
               )}
               {lineup.stage && (
@@ -115,7 +115,7 @@ export function BandRatingCard({
           {band.spotify_id && (
             <button
               onClick={() => setShowSpotify(!showSpotify)}
-              className="px-2 py-2 sm:px-3 sm:py-1.5 text-xs font-medium rounded-md bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--muted)] transition-colors whitespace-nowrap flex-shrink-0"
+              className="px-2 py-2 sm:px-3 sm:py-1.5 text-xs font-medium rounded-md bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--muted)] transition-all duration-200 whitespace-nowrap flex-shrink-0"
             >
               {showSpotify ? "Hide" : "Preview"}
             </button>
@@ -123,8 +123,12 @@ export function BandRatingCard({
         </div>
 
         {/* Spotify Embed Player */}
-        {showSpotify && band.spotify_id && (
-          <div className="mt-2">
+        {band.spotify_id && (
+          <div 
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${
+              showSpotify ? 'max-h-[250px] opacity-100 mt-2' : 'max-h-0 opacity-0 mt-0'
+            }`}
+          >
             <iframe
               src={`https://open.spotify.com/embed/artist/${band.spotify_id}?utm_source=generator&theme=0`}
               width="100%"

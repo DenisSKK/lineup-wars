@@ -41,7 +41,7 @@ export interface Lineup {
   id: string
   festival_id: string
   band_id: string
-  day_number?: number
+  day_label?: number
   stage?: string
   performance_time?: string
   created_at: string
