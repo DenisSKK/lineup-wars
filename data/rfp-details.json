@@ -518,5 +518,25 @@
     "day": "Pátek 12. 6.",
     "stage": "TBA",
     "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/the-wombats/",
+    "slug": "the-wombats",
+    "name": "The Wombats",
+    "country": "UK",
+    "day": "Středa 10. 6.",
+    "stage": "TBA",
+    "time": "TBA"
+  },
+  {
+    "festival": "rfp",
+    "url": "https://rockforpeople.cz/lineup/god-is-an-astronaut/",
+    "slug": "god-is-an-astronaut",
+    "name": "God Is An Astronaut",
+    "country": "IE",
+    "day": "Neděle 14. 6.",
+    "stage": "TBA",
+    "time": "TBA"
   }
 ]

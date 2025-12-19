@@ -84,7 +84,8 @@ function parseDayLabel(dayLabel: string, festivalYear: number): Date | null {
   if (czechMatch) {
     const day = parseInt(czechMatch[1], 10)
     const month = parseInt(czechMatch[2], 10)
-    return new Date(festivalYear, month - 1, day)
+    // Use Date.UTC to avoid timezone issues
+    return new Date(Date.UTC(festivalYear, month - 1, day))
   }
   
   // Try English format: "Thu, 11. June"
@@ -95,7 +96,8 @@ function parseDayLabel(dayLabel: string, festivalYear: number): Date | null {
     const month = englishMonths[monthStr]
     
     if (month) {
-      return new Date(festivalYear, month - 1, day)
+      // Use Date.UTC to avoid timezone issues
+      return new Date(Date.UTC(festivalYear, month - 1, day))
     }
   }
   

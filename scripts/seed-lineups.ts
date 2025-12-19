@@ -29,7 +29,77 @@ async function loadDetails(id: FestivalId): Promise<ArtistDetails[]> {
   return JSON.parse(raw) as ArtistDetails[]
 }
 
-async function ensureFestival(festivalId: FestivalId): Promise<string> {
+function parsePerformanceTime(label?: string | null): string | null {
+  if (!label) return null
+  const match = label.trim().match(/^(\d{1,2}:\d{2})$/)
+  return match ? match[1] : null
+}
+
+// English month names mapping
+const englishMonths: Record<string, number> = {
+  'january': 1, 'february': 2, 'march': 3, 'april': 4,
+  'may': 5, 'june': 6, 'july': 7, 'august': 8,
+  'september': 9, 'october': 10, 'november': 11, 'december': 12,
+  'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'jun': 6,
+  'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12,
+}
+
+/**
+ * Parse day label to extract day and month
+ * Handles formats:
+ * - Czech: "Čtvrtek 11. 6."
+ * - English: "Thu, 11. June"
+ */
+function parseDayLabel(dayLabel: string, festivalYear: number): Date | null {
+  const normalized = dayLabel.toLowerCase().trim()
+  
+  // Try Czech format: "Čtvrtek 11. 6."
+  const czechMatch = normalized.match(/(\d+)\.\s*(\d+)\.?/)
+  if (czechMatch) {
+    const day = parseInt(czechMatch[1], 10)
+    const month = parseInt(czechMatch[2], 10)
+    // Use Date.UTC to avoid timezone issues
+    return new Date(Date.UTC(festivalYear, month - 1, day))
+  }
+  
+  // Try English format: "Thu, 11. June"
+  const englishMatch = normalized.match(/(\d+)\.?\s*(\w+)/)
+  if (englishMatch) {
+    const day = parseInt(englishMatch[1], 10)
+    const monthStr = englishMatch[2].toLowerCase()
+    const month = englishMonths[monthStr]
+    
+    if (month) {
+      // Use Date.UTC to avoid timezone issues
+      return new Date(Date.UTC(festivalYear, month - 1, day))
+    }
+  }
+  
+  return null
+}
+
+/**
+ * Calculate day number based on festival start date
+ * First day is Day 1
+ */
+function calculateDayNumber(performanceDate: Date, festivalStartDate: Date): number {
+  const diffTime = performanceDate.getTime() - festivalStartDate.getTime()
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+  
+  if (diffDays < 0) {
+    return 0 // Pre-festival day
+  }
+  
+  return diffDays + 1 // Day 1, Day 2, etc.
+}
+
+interface FestivalData {
+  id: string
+  year: number
+  start_date: string | null
+}
+
+async function ensureFestival(festivalId: FestivalId): Promise<FestivalData> {
   const config = FESTIVALS.find((f) => f.id === festivalId)
   if (!config) {
     throw new Error(`Unknown festival config: ${festivalId}`)
@@ -39,7 +109,7 @@ async function ensureFestival(festivalId: FestivalId): Promise<string> {
 
   const { data: existing, error: selectError } = await supabaseAdmin
     .from('festivals')
-    .select('id')
+    .select('id, year, start_date')
     .eq('id', targetId)
     .maybeSingle()
 
@@ -47,19 +117,29 @@ async function ensureFestival(festivalId: FestivalId): Promise<string> {
     throw selectError
   }
 
-  if (existing?.id) return existing.id
+  if (existing?.id) {
+    return {
+      id: existing.id,
+      year: existing.year ?? config.year,
+      start_date: existing.start_date ?? null,
+    }
+  }
 
   const { data: inserted, error: insertError } = await supabaseAdmin
     .from('festivals')
     .insert({ id: targetId, name: config.name, year: config.year })
-    .select('id')
+    .select('id, year, start_date')
     .single()
 
   if (insertError || !inserted) {
     throw insertError ?? new Error('Failed to insert festival')
   }
 
-  return inserted.id
+  return {
+    id: inserted.id,
+    year: inserted.year ?? config.year,
+    start_date: inserted.start_date ?? null,
+  }
 }
 
 async function upsertBand(detail: ArtistDetails): Promise<{ id: string; inserted: boolean }> {
@@ -110,13 +190,26 @@ async function upsertBand(detail: ArtistDetails): Promise<{ id: string; inserted
   return { id: inserted.id, inserted: true }
 }
 
-function parsePerformanceTime(label?: string | null): string | null {
-  if (!label) return null
-  const match = label.trim().match(/^(\d{1,2}:\d{2})$/)
-  return match ? match[1] : null
-}
+async function upsertLineup(
+  festivalId: string,
+  bandId: string,
+  detail: ArtistDetails,
+  festivalYear: number,
+  festivalStartDate: string | null
+) {
+  // Parse performance date and day number from day_label
+  let performanceDate: string | null = null
+  let dayNumber: number | null = null
 
-async function upsertLineup(festivalId: string, bandId: string, detail: ArtistDetails) {
+  if (detail.day && festivalStartDate) {
+    const parsedDate = parseDayLabel(detail.day, festivalYear)
+    if (parsedDate) {
+      performanceDate = parsedDate.toISOString().split('T')[0]
+      const startDate = new Date(festivalStartDate)
+      dayNumber = calculateDayNumber(parsedDate, startDate)
+    }
+  }
+
   const payload = {
     festival_id: festivalId,
     band_id: bandId,
@@ -127,6 +220,8 @@ async function upsertLineup(festivalId: string, bandId: string, detail: ArtistDe
     stage_label: detail.stage ?? null,
     time_label: detail.time ?? null,
     performance_time: parsePerformanceTime(detail.time),
+    performance_date: performanceDate,
+    day_number: dayNumber,
   }
 
   const { error } = await supabaseAdmin
@@ -143,7 +238,7 @@ async function seed({ festival }: SeedOptions): Promise<SeedCounters> {
   const counters: SeedCounters = { bandsInserted: 0, bandsUpdated: 0, lineupsUpserted: 0, skipped: 0 }
 
   for (const festivalConfigId of targets) {
-    const festivalId = await ensureFestival(festivalConfigId)
+    const festivalData = await ensureFestival(festivalConfigId)
     const details = await loadDetails(festivalConfigId)
 
     for (const detail of details) {
@@ -156,7 +251,7 @@ async function seed({ festival }: SeedOptions): Promise<SeedCounters> {
       counters.bandsInserted += inserted ? 1 : 0
       counters.bandsUpdated += inserted ? 0 : 1
 
-      await upsertLineup(festivalId, bandId, detail)
+      await upsertLineup(festivalData.id, bandId, detail, festivalData.year, festivalData.start_date)
       counters.lineupsUpserted += 1
     }
   }
