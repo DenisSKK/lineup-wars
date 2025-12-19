@@ -117,7 +117,7 @@ export function StarRating({
       </div>
       {showValue && rating !== null && (
         <span className="text-sm text-[var(--foreground-muted)] ml-1">
-          ({rating}/10)
+          ({(rating/2).toFixed(1)}/5)
         </span>
       )}
     </div>

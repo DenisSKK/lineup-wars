@@ -53,7 +53,7 @@ export function FestivalRankings({ rankings, isLoading }: FestivalRankingsProps)
                     <StarRatingDisplay 
                       rating={ranking.averageRating} 
                       size="sm"
-                      showValue={false}
+                      showValue={true}
                     />
                   </div>
                   {ranking.topBands.length > 0 && (
