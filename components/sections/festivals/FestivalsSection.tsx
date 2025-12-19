@@ -10,7 +10,7 @@ import type { User } from "@supabase/supabase-js";
 
 import { FestivalGrid } from "./FestivalGrid";
 import { FestivalDetailDrawer } from "./FestivalDetailDrawer";
-import type { FestivalWithLineup } from "./types";
+import type { FestivalWithLineup, FestivalRatingStatus } from "./types";
 
 interface FestivalsSectionProps {
   user: User | null;
@@ -19,6 +19,7 @@ interface FestivalsSectionProps {
 export function FestivalsSection({ user }: FestivalsSectionProps) {
   const [festivals, setFestivals] = useState<FestivalWithLineup[]>([]);
   const [selectedFestivalIds, setSelectedFestivalIds] = useState<Set<string>>(new Set());
+  const [festivalRatingStatus, setFestivalRatingStatus] = useState<Map<string, FestivalRatingStatus>>(new Map());
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [selectedFestival, setSelectedFestival] = useState<FestivalWithLineup | null>(null);
@@ -41,8 +42,10 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
         `)
         .order("year", { ascending: false });
       
+      let festivalsWithCount: FestivalWithLineup[] = [];
+      
       if (festivalsData) {
-        const festivalsWithCount: FestivalWithLineup[] = festivalsData.map((f: Festival & { lineups: { count: number }[] }) => ({
+        festivalsWithCount = festivalsData.map((f: Festival & { lineups: { count: number }[] }) => ({
           ...f,
           bandCount: f.lineups?.[0]?.count || 0,
           lineups: undefined, // Clear the count-only lineups from the initial fetch
@@ -50,7 +53,7 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
         setFestivals(festivalsWithCount);
       }
       
-      // Fetch user's selected festivals
+      // Fetch user's selected festivals and rating status
       if (user) {
         const { data: userFestivals } = await supabase
           .from("user_festivals")
@@ -59,6 +62,44 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
         
         if (userFestivals) {
           setSelectedFestivalIds(new Set(userFestivals.map((uf: { festival_id: string }) => uf.festival_id)));
+        }
+        
+        // Fetch all band ratings for selected festivals to determine status
+        if (festivalsWithCount.length > 0) {
+          const statusMap = new Map<string, FestivalRatingStatus>();
+          
+          for (const festival of festivalsWithCount) {
+            // Get all bands for this festival
+            const { data: festivalBands } = await supabase
+              .from("lineups")
+              .select("band_id")
+              .eq("festival_id", festival.id);
+            
+            if (festivalBands && festivalBands.length > 0) {
+              // Get user ratings for these bands
+              const bandIds = festivalBands.map(lb => lb.band_id);
+              const { data: ratings } = await supabase
+                .from("band_ratings")
+                .select("band_id")
+                .eq("user_id", user.id)
+                .in("band_id", bandIds);
+              
+              const ratedCount = ratings?.length || 0;
+              const totalBands = festivalBands.length;
+              
+              if (ratedCount === 0) {
+                statusMap.set(festival.id, "not-rated");
+              } else if (ratedCount < totalBands) {
+                statusMap.set(festival.id, "rating");
+              } else {
+                statusMap.set(festival.id, "rated");
+              }
+            } else {
+              statusMap.set(festival.id, "not-rated");
+            }
+          }
+          
+          setFestivalRatingStatus(statusMap);
         }
       }
       
@@ -135,6 +176,30 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
       
       setSelectedFestivalIds(new Set([...selectedFestivalIds, selectedFestival.id]));
     }
+    
+    // Update festival rating status
+    const { data: festivalBands } = await supabase
+      .from("lineups")
+      .select("band_id")
+      .eq("festival_id", selectedFestival.id);
+    
+    if (festivalBands && festivalBands.length > 0) {
+      const bandIds = festivalBands.map(lb => lb.band_id);
+      const { data: ratings } = await supabase
+        .from("band_ratings")
+        .select("band_id")
+        .eq("user_id", user.id)
+        .in("band_id", bandIds);
+      
+      const ratedCount = ratings?.length || 0;
+      const totalBands = festivalBands.length;
+      
+      const newStatus: FestivalRatingStatus = 
+        ratedCount === 0 ? "not-rated" : 
+        ratedCount < totalBands ? "rating" : "rated";
+      
+      setFestivalRatingStatus(new Map(festivalRatingStatus.set(selectedFestival.id, newStatus)));
+    }
   };
   
   // Filter festivals
@@ -180,6 +245,7 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
         <FestivalGrid
           festivals={filteredFestivals}
           selectedFestivalIds={selectedFestivalIds}
+          festivalRatingStatus={festivalRatingStatus}
           isLoading={isLoading}
           searchQuery={searchQuery}
           onFestivalClick={openFestivalDrawer}

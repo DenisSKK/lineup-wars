@@ -4,11 +4,12 @@ import { motion } from "framer-motion";
 import { Calendar, MapPin, Music2, Star, ChevronRight } from "lucide-react";
 import { Card, CardContent, Badge } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import type { FestivalWithLineup } from "./types";
+import type { FestivalWithLineup, FestivalRatingStatus } from "./types";
 
 interface FestivalCardProps {
   festival: FestivalWithLineup;
   isSelected: boolean;
+  ratingStatus: FestivalRatingStatus;
   onClick: () => void;
 }
 
@@ -17,7 +18,19 @@ const itemVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
-export function FestivalCard({ festival, isSelected, onClick }: FestivalCardProps) {
+export function FestivalCard({ festival, isSelected, ratingStatus, onClick }: FestivalCardProps) {
+  const getBadgeConfig = () => {
+    switch (ratingStatus) {
+      case "not-rated":
+        return { variant: "default" as const, icon: Star, text: "Not Rated" };
+      case "rating":
+        return { variant: "warning" as const, icon: Star, text: "Rating" };
+      case "rated":
+        return { variant: "success" as const, icon: Star, text: "Rated" };
+    }
+  };
+  
+  const badgeConfig = getBadgeConfig();
   return (
     <motion.div variants={itemVariants}>
       <Card
@@ -36,9 +49,9 @@ export function FestivalCard({ festival, isSelected, onClick }: FestivalCardProp
           </div>
           {isSelected && (
             <div className="absolute top-3 right-3">
-              <Badge variant="success" size="sm">
-                <Star className="h-3 w-3 mr-1 fill-current" />
-                Rating
+              <Badge variant={badgeConfig.variant} size="sm">
+                <badgeConfig.icon className="h-3 w-3 mr-1 fill-current" />
+                {badgeConfig.text}
               </Badge>
             </div>
           )}

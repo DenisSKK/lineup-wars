@@ -1,6 +1,8 @@
 import type { Festival, Band, Lineup } from "@/lib/types/database";
 import type { User } from "@supabase/supabase-js";
 
+export type FestivalRatingStatus = "not-rated" | "rating" | "rated";
+
 export interface FestivalWithLineup extends Festival {
   lineups?: Array<Lineup & { band: Band }>;
   bandCount?: number;

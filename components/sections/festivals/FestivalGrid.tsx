@@ -4,11 +4,12 @@ import { motion } from "framer-motion";
 import { Music2 } from "lucide-react";
 import { SkeletonCard } from "@/components/ui";
 import { FestivalCard } from "./FestivalCard";
-import type { FestivalWithLineup } from "./types";
+import type { FestivalWithLineup, FestivalRatingStatus } from "./types";
 
 interface FestivalGridProps {
   festivals: FestivalWithLineup[];
   selectedFestivalIds: Set<string>;
+  festivalRatingStatus: Map<string, FestivalRatingStatus>;
   isLoading: boolean;
   searchQuery: string;
   onFestivalClick: (festival: FestivalWithLineup) => void;
@@ -25,6 +26,7 @@ const containerVariants = {
 export function FestivalGrid({
   festivals,
   selectedFestivalIds,
+  festivalRatingStatus,
   isLoading,
   searchQuery,
   onFestivalClick,
@@ -63,6 +65,7 @@ export function FestivalGrid({
           key={festival.id}
           festival={festival}
           isSelected={selectedFestivalIds.has(festival.id)}
+          ratingStatus={festivalRatingStatus.get(festival.id) || "not-rated"}
           onClick={() => onFestivalClick(festival)}
         />
       ))}
