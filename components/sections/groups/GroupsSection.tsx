@@ -143,6 +143,9 @@ export function GroupsSection({ user }: GroupsSectionProps) {
     setIsDrawerOpen(true);
     setIsLoadingRankings(true);
     setIsDrawerDescriptionExpanded(false);
+    setSearchQuery("");
+    setSearchResults([]);
+    setHasSearched(false);
     
     // Fetch group members
     const { data: members } = await supabase
@@ -457,7 +460,12 @@ export function GroupsSection({ user }: GroupsSectionProps) {
             currentUserId={user.id}
             isDescriptionExpanded={isDrawerDescriptionExpanded}
             onToggleDescription={() => setIsDrawerDescriptionExpanded(!isDrawerDescriptionExpanded)}
-            onClose={() => setIsDrawerOpen(false)}
+            onClose={() => {
+              setIsDrawerOpen(false);
+              setSearchQuery("");
+              setSearchResults([]);
+              setHasSearched(false);
+            }}
             onRemoveMember={removeMember}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
