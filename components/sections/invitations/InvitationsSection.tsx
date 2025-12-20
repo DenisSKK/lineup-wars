@@ -99,12 +99,7 @@ export function InvitationsSection({ user }: InvitationsSectionProps) {
     setPendingInvitations(pending || []);
     setDeclinedInvitations(declined || []);
     setJoinRequests(requests);
-    setSentInvitations(
-      (sent || []).map((s: SentInvitation & { invitee: { email: string; full_name: string | null } }) => ({
-        ...s,
-        invitee: s.invitee,
-      }))
-    );
+    setSentInvitations(sent || []);
     setIsLoading(false);
   }, [user, supabase]);
   
