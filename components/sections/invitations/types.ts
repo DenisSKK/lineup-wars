@@ -19,7 +19,26 @@ export interface Invitation {
   };
 }
 
-export type TabType = "pending" | "declined" | "requests";
+export interface SentInvitation {
+  id: string;
+  group_id: string;
+  invited_user_id: string;
+  invited_by: string;
+  status: "pending" | "accepted" | "declined" | "requested";
+  created_at: string;
+  group: {
+    id: string;
+    name: string;
+    description: string | null;
+    created_by: string;
+  };
+  invitee: {
+    email: string;
+    full_name: string | null;
+  };
+}
+
+export type TabType = "pending" | "declined" | "requests" | "sent";
 
 export interface InvitationsSectionProps {
   user: User | null;

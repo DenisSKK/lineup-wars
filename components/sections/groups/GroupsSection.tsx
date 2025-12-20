@@ -40,6 +40,7 @@ export function GroupsSection({ user }: GroupsSectionProps) {
   // Invite form state
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Profile[]>([]);
+  const [hasSearched, setHasSearched] = useState(false);
   
   const supabase = createClient();
   
@@ -268,8 +269,11 @@ export function GroupsSection({ user }: GroupsSectionProps) {
   const searchUsers = async (query: string) => {
     if (!user || !selectedGroup || query.length < 2) {
       setSearchResults([]);
+      setHasSearched(false);
       return;
     }
+    
+    setHasSearched(true);
     
     // Get existing members and pending invitations
     const { data: members } = await supabase
@@ -315,6 +319,7 @@ export function GroupsSection({ user }: GroupsSectionProps) {
     
     setSearchQuery("");
     setSearchResults([]);
+    setHasSearched(false);
   };
   
   // Delete group
@@ -459,6 +464,7 @@ export function GroupsSection({ user }: GroupsSectionProps) {
             searchResults={searchResults}
             onSearch={searchUsers}
             onInvite={inviteUser}
+            hasSearched={hasSearched}
             rankings={rankings}
             isLoadingRankings={isLoadingRankings}
             onDeleteGroup={deleteGroup}

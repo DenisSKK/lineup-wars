@@ -26,6 +26,7 @@ interface GroupDetailDrawerProps {
   searchResults: Profile[];
   onSearch: (query: string) => void;
   onInvite: (userId: string) => void;
+  hasSearched: boolean;
   
   // Rankings
   rankings: FestivalRanking[];
@@ -47,6 +48,7 @@ export function GroupDetailDrawer({
   searchResults,
   onSearch,
   onInvite,
+  hasSearched,
   rankings,
   isLoadingRankings,
   onDeleteGroup,
@@ -136,6 +138,7 @@ export function GroupDetailDrawer({
               searchResults={searchResults}
               onSearch={onSearch}
               onInvite={onInvite}
+              hasSearched={hasSearched}
             />
           )}
           
