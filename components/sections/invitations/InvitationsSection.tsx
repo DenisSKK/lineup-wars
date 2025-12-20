@@ -10,7 +10,8 @@ import { InvitationTabs } from "./InvitationTabs";
 import { PendingInvitationsList } from "./PendingInvitationsList";
 import { DeclinedInvitationsList } from "./DeclinedInvitationsList";
 import { JoinRequestsList } from "./JoinRequestsList";
-import type { Invitation, TabType } from "./types";
+import { SentInvitationsList } from "./SentInvitationsList";
+import type { Invitation, TabType, SentInvitation } from "./types";
 
 interface InvitationsSectionProps {
   user: User | null;
@@ -21,6 +22,7 @@ export function InvitationsSection({ user }: InvitationsSectionProps) {
   const [pendingInvitations, setPendingInvitations] = useState<Invitation[]>([]);
   const [declinedInvitations, setDeclinedInvitations] = useState<Invitation[]>([]);
   const [joinRequests, setJoinRequests] = useState<Invitation[]>([]);
+  const [sentInvitations, setSentInvitations] = useState<SentInvitation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [processingIds, setProcessingIds] = useState<Set<string>>(new Set());
   
@@ -83,9 +85,21 @@ export function InvitationsSection({ user }: InvitationsSectionProps) {
       }));
     }
     
+    // Fetch sent invitations (invitations created by the user)
+    const { data: sent } = await supabase
+      .from("group_invitations")
+      .select(`
+        *,
+        group:groups(id, name, description, created_by),
+        invitee:invited_user_id(email, full_name)
+      `)
+      .eq("invited_by", user.id)
+      .order("created_at", { ascending: false });
+    
     setPendingInvitations(pending || []);
     setDeclinedInvitations(declined || []);
     setJoinRequests(requests);
+    setSentInvitations(sent || []);
     setIsLoading(false);
   }, [user, supabase]);
   
@@ -278,6 +292,7 @@ export function InvitationsSection({ user }: InvitationsSectionProps) {
             pendingCount={pendingInvitations.length}
             declinedCount={declinedInvitations.length}
             requestsCount={joinRequests.length}
+            sentCount={sentInvitations.length}
           />
         </motion.div>
         
@@ -319,6 +334,13 @@ export function InvitationsSection({ user }: InvitationsSectionProps) {
                   processingIds={processingIds}
                   onApprove={approveRequest}
                   onDeny={denyRequest}
+                />
+              )}
+              
+              {activeTab === "sent" && (
+                <SentInvitationsList
+                  key="sent"
+                  invitations={sentInvitations}
                 />
               )}
             </AnimatePresence>

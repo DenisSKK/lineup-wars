@@ -10,6 +10,7 @@ interface InviteUsersSectionProps {
   searchResults: Profile[];
   onSearch: (query: string) => void;
   onInvite: (userId: string) => void;
+  hasSearched: boolean;
 }
 
 export function InviteUsersSection({
@@ -18,6 +19,7 @@ export function InviteUsersSection({
   searchResults,
   onSearch,
   onInvite,
+  hasSearched,
 }: InviteUsersSectionProps) {
   return (
     <div>
@@ -41,6 +43,14 @@ export function InviteUsersSection({
           Search
         </Button>
       </div>
+      
+      {hasSearched && searchResults.length === 0 && (
+        <div className="mt-3 p-4 text-center rounded-lg bg-[var(--background-tertiary)]">
+          <p className="text-[var(--foreground-muted)]">
+            No users found
+          </p>
+        </div>
+      )}
       
       {searchResults.length > 0 && (
         <div className="mt-3 space-y-2">

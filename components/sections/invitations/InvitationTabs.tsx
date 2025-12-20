@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, X, UserPlus } from "lucide-react";
+import { Clock, X, UserPlus, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { TabType } from "./types";
 
@@ -17,6 +17,7 @@ interface InvitationTabsProps {
   pendingCount: number;
   declinedCount: number;
   requestsCount: number;
+  sentCount: number;
 }
 
 export function InvitationTabs({
@@ -25,6 +26,7 @@ export function InvitationTabs({
   pendingCount,
   declinedCount,
   requestsCount,
+  sentCount,
 }: InvitationTabsProps) {
   const tabs: Tab[] = [
     { 
@@ -44,6 +46,12 @@ export function InvitationTabs({
       label: "Join Requests", 
       count: requestsCount,
       icon: <UserPlus className="h-4 w-4" />,
+    },
+    { 
+      id: "sent", 
+      label: "Sent Invites", 
+      count: sentCount,
+      icon: <Send className="h-4 w-4" />,
     },
   ];
 

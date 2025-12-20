@@ -40,6 +40,7 @@ export function GroupsSection({ user }: GroupsSectionProps) {
   // Invite form state
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Profile[]>([]);
+  const [hasSearched, setHasSearched] = useState(false);
   
   const supabase = createClient();
   
@@ -142,6 +143,9 @@ export function GroupsSection({ user }: GroupsSectionProps) {
     setIsDrawerOpen(true);
     setIsLoadingRankings(true);
     setIsDrawerDescriptionExpanded(false);
+    setSearchQuery("");
+    setSearchResults([]);
+    setHasSearched(false);
     
     // Fetch group members
     const { data: members } = await supabase
@@ -268,8 +272,11 @@ export function GroupsSection({ user }: GroupsSectionProps) {
   const searchUsers = async (query: string) => {
     if (!user || !selectedGroup || query.length < 2) {
       setSearchResults([]);
+      setHasSearched(false);
       return;
     }
+    
+    setHasSearched(true);
     
     // Get existing members and pending invitations
     const { data: members } = await supabase
@@ -315,6 +322,7 @@ export function GroupsSection({ user }: GroupsSectionProps) {
     
     setSearchQuery("");
     setSearchResults([]);
+    setHasSearched(false);
   };
   
   // Delete group
@@ -452,13 +460,19 @@ export function GroupsSection({ user }: GroupsSectionProps) {
             currentUserId={user.id}
             isDescriptionExpanded={isDrawerDescriptionExpanded}
             onToggleDescription={() => setIsDrawerDescriptionExpanded(!isDrawerDescriptionExpanded)}
-            onClose={() => setIsDrawerOpen(false)}
+            onClose={() => {
+              setIsDrawerOpen(false);
+              setSearchQuery("");
+              setSearchResults([]);
+              setHasSearched(false);
+            }}
             onRemoveMember={removeMember}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             searchResults={searchResults}
             onSearch={searchUsers}
             onInvite={inviteUser}
+            hasSearched={hasSearched}
             rankings={rankings}
             isLoadingRankings={isLoadingRankings}
             onDeleteGroup={deleteGroup}
