@@ -41,14 +41,14 @@ const getStatusBadge = (status: string) => {
       );
     case "declined":
       return (
-        <Badge variant="danger" size="sm">
+        <Badge variant="error" size="sm">
           <X className="h-3 w-3 mr-1" />
           Declined
         </Badge>
       );
     case "requested":
       return (
-        <Badge variant="info" size="sm">
+        <Badge variant="primary" size="sm">
           <UserPlus className="h-3 w-3 mr-1" />
           Requested to Join
         </Badge>
