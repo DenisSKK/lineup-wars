@@ -3,8 +3,9 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Calendar, MapPin, X, Music2, Star } from "lucide-react";
-import { Button, Skeleton, Badge } from "@/components/ui";
+import { Button, Skeleton } from "@/components/ui";
 import { BandRatingCard } from "./BandRatingCard";
+import { RatingStatistics } from "./RatingStatistics";
 import type { FestivalWithLineup } from "./types";
 
 interface FestivalDetailDrawerProps {
@@ -24,6 +25,26 @@ export function FestivalDetailDrawer({
 }: FestivalDetailDrawerProps) {
   const [showUnratedOnly, setShowUnratedOnly] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+
+  // Calculate statistics from festival lineups and ratings
+  const festivalUserRatings = useMemo(() => {
+    if (!festival.lineups || festival.lineups.length === 0) {
+      return new Map<string, number>();
+    }
+    
+    const filteredRatings = new Map<string, number>();
+    
+    // Iterate through lineups and get rating for each unique band
+    festival.lineups.forEach(lineup => {
+      const bandId = lineup.band.id;
+      // Only add if we have a rating and haven't added this band yet
+      if (userRatings.has(bandId) && !filteredRatings.has(bandId)) {
+        filteredRatings.set(bandId, userRatings.get(bandId)!);
+      }
+    });
+    
+    return filteredRatings;
+  }, [festival.id, festival.lineups, userRatings]);
 
   // Get unique performance dates
   const performanceDates = useMemo(() => {
@@ -164,6 +185,14 @@ export function FestivalDetailDrawer({
         
         {/* Drawer Content */}
         <div className="p-6 px-1.5 sm:px-6">
+          {/* Rating Statistics */}
+          {isAuthenticated && festivalUserRatings.size > 0 && festival.lineups && (
+            <RatingStatistics 
+              key={festival.id}
+              userRatings={festivalUserRatings}
+              totalBands={festival.lineups.length}
+            />
+          )}
           {!isAuthenticated ? (
             <div className="text-center py-12">
               <p className="text-[var(--foreground-muted)] mb-4">

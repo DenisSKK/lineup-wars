@@ -16,6 +16,13 @@ export interface FestivalRanking {
     name: string;
     avgRating: number;
   }>;
+  ratingCount?: number;
+  memberCount?: number;
+  userRating?: number;
+  ratingDistribution?: Array<{
+    starValue: number;
+    count: number;
+  }>;
 }
 
 export interface GroupsSectionProps {
