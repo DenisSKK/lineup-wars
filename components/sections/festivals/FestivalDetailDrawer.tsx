@@ -47,7 +47,7 @@ export function FestivalDetailDrawer({
     });
     
     return filteredRatings;
-  }, [festival.lineups, userRatings]);
+  }, [festival.id, festival.lineups, userRatings]);
 
   // Get unique performance dates
   const performanceDates = useMemo(() => {
