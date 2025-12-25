@@ -45,11 +45,13 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
       let festivalsWithCount: FestivalWithLineup[] = [];
       
       if (festivalsData) {
-        festivalsWithCount = festivalsData.map((f: Festival & { lineups: { count: number }[] }) => ({
-          ...f,
-          bandCount: f.lineups?.[0]?.count || 0,
-          lineups: undefined,
-        }));
+        festivalsWithCount = festivalsData.map((f: Festival & { lineups: { count: number }[] }) => {
+          const { lineups, ...festivalData } = f;
+          return {
+            ...festivalData,
+            bandCount: lineups?.[0]?.count || 0,
+          };
+        });
         setFestivals(festivalsWithCount);
       }
       
@@ -93,10 +95,17 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
             const statusMap = new Map<string, FestivalRatingStatus>();
             festivalsWithCount.forEach(festival => {
               const bandIds = festivalBands.get(festival.id) || [];
-              const ratedCount = bandIds.filter(id => ratedBandIds.has(id)).length;
               const totalBands = bandIds.length;
               
-              if (totalBands === 0 || ratedCount === 0) {
+              // Handle festivals with no bands
+              if (totalBands === 0) {
+                statusMap.set(festival.id, "not-rated");
+                return;
+              }
+              
+              const ratedCount = bandIds.filter(id => ratedBandIds.has(id)).length;
+              
+              if (ratedCount === 0) {
                 statusMap.set(festival.id, "not-rated");
               } else if (ratedCount < totalBands) {
                 statusMap.set(festival.id, "rating");
