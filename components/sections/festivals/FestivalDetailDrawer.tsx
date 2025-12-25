@@ -26,6 +26,22 @@ export function FestivalDetailDrawer({
   const [showUnratedOnly, setShowUnratedOnly] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
+  // Filter user ratings to only include bands in this festival's lineup
+  const festivalUserRatings = useMemo(() => {
+    if (!festival.lineups) return new Map<string, number>();
+    
+    const festivalBandIds = new Set(festival.lineups.map(lineup => lineup.band.id));
+    const filteredRatings = new Map<string, number>();
+    
+    userRatings.forEach((rating, bandId) => {
+      if (festivalBandIds.has(bandId)) {
+        filteredRatings.set(bandId, rating);
+      }
+    });
+    
+    return filteredRatings;
+  }, [festival.lineups, userRatings]);
+
   // Get unique performance dates
   const performanceDates = useMemo(() => {
     if (!festival.lineups) return [];
@@ -166,9 +182,9 @@ export function FestivalDetailDrawer({
         {/* Drawer Content */}
         <div className="p-6 px-1.5 sm:px-6">
           {/* Rating Statistics */}
-          {isAuthenticated && userRatings.size > 0 && festival.lineups && (
+          {isAuthenticated && festivalUserRatings.size > 0 && festival.lineups && (
             <RatingStatistics 
-              userRatings={userRatings}
+              userRatings={festivalUserRatings}
               totalBands={festival.lineups.length}
             />
           )}
