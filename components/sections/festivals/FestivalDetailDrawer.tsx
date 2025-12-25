@@ -3,8 +3,9 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Calendar, MapPin, X, Music2, Star } from "lucide-react";
-import { Button, Skeleton, Badge } from "@/components/ui";
+import { Button, Skeleton } from "@/components/ui";
 import { BandRatingCard } from "./BandRatingCard";
+import { RatingStatistics } from "./RatingStatistics";
 import type { FestivalWithLineup } from "./types";
 
 interface FestivalDetailDrawerProps {
@@ -164,6 +165,13 @@ export function FestivalDetailDrawer({
         
         {/* Drawer Content */}
         <div className="p-6 px-1.5 sm:px-6">
+          {/* Rating Statistics */}
+          {isAuthenticated && userRatings.size > 0 && festival.lineups && (
+            <RatingStatistics 
+              userRatings={userRatings}
+              totalBands={festival.lineups.length}
+            />
+          )}
           {!isAuthenticated ? (
             <div className="text-center py-12">
               <p className="text-[var(--foreground-muted)] mb-4">
