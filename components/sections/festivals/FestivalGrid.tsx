@@ -1,10 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Music2 } from "lucide-react";
 import { SkeletonCard } from "@/components/ui";
 import { FestivalCard } from "./FestivalCard";
 import type { FestivalWithLineup, FestivalRatingStatus } from "./types";
+import { memo } from "react";
 
 interface FestivalGridProps {
   festivals: FestivalWithLineup[];
@@ -15,15 +15,7 @@ interface FestivalGridProps {
   onFestivalClick: (festival: FestivalWithLineup) => void;
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 },
-  },
-};
-
-export function FestivalGrid({
+export const FestivalGrid = memo(function FestivalGrid({
   festivals,
   selectedFestivalIds,
   festivalRatingStatus,
@@ -53,13 +45,7 @@ export function FestivalGrid({
   }
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-      className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-    >
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {festivals.map((festival) => (
         <FestivalCard
           key={festival.id}
@@ -69,6 +55,6 @@ export function FestivalGrid({
           onClick={() => onFestivalClick(festival)}
         />
       ))}
-    </motion.div>
+    </div>
   );
-}
+});
