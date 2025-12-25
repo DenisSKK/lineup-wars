@@ -40,7 +40,7 @@ export const GroupList = memo(function GroupList({
       <Card variant="default" padding="lg" className="text-center">
         <Users className="h-16 w-16 text-[var(--foreground-subtle)] mx-auto mb-4" />
         <p className="text-[var(--foreground-muted)] mb-2">
-          You haven't joined any groups yet
+          You haven&apos;t joined any groups yet
         </p>
         <p className="text-sm text-[var(--foreground-subtle)]">
           Create a new group to start comparing festival ratings with friends
