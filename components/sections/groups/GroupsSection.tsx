@@ -230,6 +230,31 @@ export function GroupsSection({ user }: GroupsSectionProps) {
         (sum: number, r: { rating: number }) => sum + r.rating, 0
       ) / festivalRatings.length;
       
+      // Count total ratings and unique members who rated
+      const ratingCount = festivalRatings.length;
+      const uniqueMembers = new Set(festivalRatings.map((r: { user_id: string }) => r.user_id));
+      const memberCount = uniqueMembers.size;
+      
+      // Get user's rating for this festival
+      const userFestivalRatings = festivalRatings.filter(
+        (r: { user_id: string }) => r.user_id === user?.id
+      );
+      const userRating = userFestivalRatings.length > 0
+        ? userFestivalRatings.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / userFestivalRatings.length
+        : undefined;
+      
+      // Calculate rating distribution
+      const distributionMap = new Map<number, number>();
+      festivalRatings.forEach((r: { rating: number }) => {
+        const stars = r.rating / 2;
+        const roundedStars = Math.round(stars * 2) / 2; // Round to nearest 0.5
+        distributionMap.set(roundedStars, (distributionMap.get(roundedStars) || 0) + 1);
+      });
+      
+      const ratingDistribution = Array.from(distributionMap.entries())
+        .map(([starValue, count]) => ({ starValue, count }))
+        .sort((a, b) => b.starValue - a.starValue);
+      
       // Get top bands
       const bandRatings = new Map<string, { name: string; total: number; count: number }>();
       
@@ -259,6 +284,10 @@ export function GroupsSection({ user }: GroupsSectionProps) {
         festival,
         averageRating: avgRating,
         topBands,
+        ratingCount,
+        memberCount,
+        userRating,
+        ratingDistribution,
       });
     }
     

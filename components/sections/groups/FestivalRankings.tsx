@@ -1,6 +1,6 @@
 "use client";
 
-import { Trophy, Music2 } from "lucide-react";
+import { Trophy, Music2, Star, TrendingUp } from "lucide-react";
 import { Card, Badge, Skeleton, StarRatingDisplay } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import type { FestivalRanking } from "./types";
@@ -49,20 +49,61 @@ export function FestivalRankings({ rankings, isLoading }: FestivalRankingsProps)
                   <h5 className="font-semibold text-[var(--foreground)] mb-2">
                     {ranking.festival.name}
                   </h5>
+                  
+                  {/* Group Average Rating */}
                   <div className="flex items-center gap-2 mb-2">
+                    <span className="text-xs text-[var(--foreground-muted)]">Group Avg:</span>
                     <StarRatingDisplay 
                       rating={ranking.averageRating} 
                       size="sm"
                       showValue={true}
                     />
+                    {ranking.ratingCount && ranking.memberCount && (
+                      <Badge variant="outline" size="sm">
+                        {ranking.ratingCount} rating{ranking.ratingCount !== 1 ? 's' : ''} from {ranking.memberCount} member{ranking.memberCount !== 1 ? 's' : ''}
+                      </Badge>
+                    )}
                   </div>
+                  
+                  {/* User's Rating */}
+                  {ranking.userRating !== undefined && (
+                    <div className="flex items-center gap-2 mb-2 p-2 bg-[var(--background-tertiary)] rounded-md">
+                      <TrendingUp className="h-4 w-4 text-[var(--accent-primary)]" />
+                      <span className="text-xs text-[var(--foreground-muted)]">Your Avg:</span>
+                      <StarRatingDisplay 
+                        rating={ranking.userRating} 
+                        size="sm"
+                        showValue={true}
+                      />
+                    </div>
+                  )}
+                  
+                  {/* Rating Distribution (compact) */}
+                  {ranking.ratingDistribution && ranking.ratingDistribution.length > 0 && (
+                    <div className="mb-2 space-y-1">
+                      <h6 className="text-xs font-medium text-[var(--foreground-muted)]">Rating Distribution</h6>
+                      <div className="flex flex-wrap gap-1">
+                        {ranking.ratingDistribution.slice(0, 5).map(({ starValue, count }) => (
+                          <Badge key={starValue} variant="outline" size="sm" className="text-xs">
+                            <Star className="h-2.5 w-2.5 fill-[var(--accent-warning)] text-[var(--accent-warning)] mr-1" />
+                            {starValue.toFixed(1)}: {count}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Top Bands */}
                   {ranking.topBands.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {ranking.topBands.map((band) => (
-                        <Badge key={band.name} variant="primary" size="sm">
-                          {band.name} ({band.avgRating.toFixed(1)})
-                        </Badge>
-                      ))}
+                    <div>
+                      <h6 className="text-xs font-medium text-[var(--foreground-muted)] mb-1">Top Rated Bands</h6>
+                      <div className="flex flex-wrap gap-2">
+                        {ranking.topBands.map((band) => (
+                          <Badge key={band.name} variant="primary" size="sm">
+                            {band.name} ({band.avgRating.toFixed(1)})
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
