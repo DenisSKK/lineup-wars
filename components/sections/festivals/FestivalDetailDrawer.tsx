@@ -28,11 +28,18 @@ export function FestivalDetailDrawer({
 
   // Filter user ratings to only include bands in this festival's lineup
   const festivalUserRatings = useMemo(() => {
-    if (!festival.lineups) return new Map<string, number>();
+    if (!festival.lineups || festival.lineups.length === 0) {
+      return new Map<string, number>();
+    }
     
-    const festivalBandIds = new Set(festival.lineups.map(lineup => lineup.band.id));
+    // Get unique band IDs from this festival's lineup
+    const festivalBandIds = new Set<string>();
+    festival.lineups.forEach(lineup => {
+      festivalBandIds.add(lineup.band.id);
+    });
+    
+    // Filter ratings to only include bands in this festival
     const filteredRatings = new Map<string, number>();
-    
     userRatings.forEach((rating, bandId) => {
       if (festivalBandIds.has(bandId)) {
         filteredRatings.set(bandId, rating);
@@ -184,6 +191,7 @@ export function FestivalDetailDrawer({
           {/* Rating Statistics */}
           {isAuthenticated && festivalUserRatings.size > 0 && festival.lineups && (
             <RatingStatistics 
+              key={festival.id}
               userRatings={festivalUserRatings}
               totalBands={festival.lineups.length}
             />
