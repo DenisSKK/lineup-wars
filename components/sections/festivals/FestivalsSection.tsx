@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -26,14 +26,14 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
   const [userRatings, setUserRatings] = useState<Map<string, number>>(new Map());
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   
   // Fetch festivals and user selections
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       
-      // Fetch all festivals with band count
+      // Fetch all festivals with band count in a single optimized query
       const { data: festivalsData } = await supabase
         .from("festivals")
         .select(`
@@ -45,15 +45,17 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
       let festivalsWithCount: FestivalWithLineup[] = [];
       
       if (festivalsData) {
-        festivalsWithCount = festivalsData.map((f: Festival & { lineups: { count: number }[] }) => ({
-          ...f,
-          bandCount: f.lineups?.[0]?.count || 0,
-          lineups: undefined, // Clear the count-only lineups from the initial fetch
-        }));
+        festivalsWithCount = festivalsData.map((f: Festival & { lineups: { count: number }[] }) => {
+          const { lineups, ...festivalData } = f;
+          return {
+            ...festivalData,
+            bandCount: lineups?.[0]?.count || 0,
+          };
+        });
         setFestivals(festivalsWithCount);
       }
       
-      // Fetch user's selected festivals and rating status
+      // Fetch user's selected festivals and rating status only if user is authenticated
       if (user) {
         const { data: userFestivals } = await supabase
           .from("user_festivals")
@@ -64,28 +66,44 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
           setSelectedFestivalIds(new Set(userFestivals.map((uf: { festival_id: string }) => uf.festival_id)));
         }
         
-        // Fetch all band ratings for selected festivals to determine status
+        // Optimized: Fetch rating status in batched queries instead of N+1
         if (festivalsWithCount.length > 0) {
-          const statusMap = new Map<string, FestivalRatingStatus>();
+          // Get all lineup band IDs in one query
+          const { data: allLineups } = await supabase
+            .from("lineups")
+            .select("festival_id, band_id");
           
-          for (const festival of festivalsWithCount) {
-            // Get all bands for this festival
-            const { data: festivalBands } = await supabase
-              .from("lineups")
-              .select("band_id")
-              .eq("festival_id", festival.id);
+          // Get all user ratings in one query
+          const { data: allRatings } = await supabase
+            .from("band_ratings")
+            .select("band_id")
+            .eq("user_id", user.id);
+          
+          if (allLineups && allRatings) {
+            const ratedBandIds = new Set(allRatings.map(r => r.band_id));
+            const festivalBands = new Map<string, string[]>();
             
-            if (festivalBands && festivalBands.length > 0) {
-              // Get user ratings for these bands
-              const bandIds = festivalBands.map(lb => lb.band_id);
-              const { data: ratings } = await supabase
-                .from("band_ratings")
-                .select("band_id")
-                .eq("user_id", user.id)
-                .in("band_id", bandIds);
+            // Group bands by festival
+            allLineups.forEach(lineup => {
+              if (!festivalBands.has(lineup.festival_id)) {
+                festivalBands.set(lineup.festival_id, []);
+              }
+              festivalBands.get(lineup.festival_id)!.push(lineup.band_id);
+            });
+            
+            // Calculate status for each festival
+            const statusMap = new Map<string, FestivalRatingStatus>();
+            festivalsWithCount.forEach(festival => {
+              const bandIds = festivalBands.get(festival.id) || [];
+              const totalBands = bandIds.length;
               
-              const ratedCount = ratings?.length || 0;
-              const totalBands = festivalBands.length;
+              // Handle festivals with no bands
+              if (totalBands === 0) {
+                statusMap.set(festival.id, "not-rated");
+                return;
+              }
+              
+              const ratedCount = bandIds.filter(id => ratedBandIds.has(id)).length;
               
               if (ratedCount === 0) {
                 statusMap.set(festival.id, "not-rated");
@@ -94,12 +112,10 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
               } else {
                 statusMap.set(festival.id, "rated");
               }
-            } else {
-              statusMap.set(festival.id, "not-rated");
-            }
+            });
+            
+            setFestivalRatingStatus(statusMap);
           }
-          
-          setFestivalRatingStatus(statusMap);
         }
       }
       
@@ -146,7 +162,7 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
   }, [user, supabase]);
   
   // Rate a band
-  const rateBand = async (bandId: string, rating: number) => {
+  const rateBand = useCallback(async (bandId: string, rating: number) => {
     if (!user || !selectedFestival) return;
     
     // Optimistic update
@@ -200,12 +216,15 @@ export function FestivalsSection({ user }: FestivalsSectionProps) {
       
       setFestivalRatingStatus(new Map(festivalRatingStatus.set(selectedFestival.id, newStatus)));
     }
-  };
+  }, [user, selectedFestival, userRatings, selectedFestivalIds, festivalRatingStatus, supabase]);
   
-  // Filter festivals
-  const filteredFestivals = festivals.filter((festival) =>
-    festival.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    festival.location?.toLowerCase().includes(searchQuery.toLowerCase())
+  // Filter festivals with memoization
+  const filteredFestivals = useMemo(() => 
+    festivals.filter((festival) =>
+      festival.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      festival.location?.toLowerCase().includes(searchQuery.toLowerCase())
+    ),
+    [festivals, searchQuery]
   );
   
   return (

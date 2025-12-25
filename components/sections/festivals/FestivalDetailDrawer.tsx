@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Calendar, MapPin, X, Music2, Star } from "lucide-react";
-import { Button, Skeleton, Badge } from "@/components/ui";
+import { Button, Skeleton } from "@/components/ui";
 import { BandRatingCard } from "./BandRatingCard";
 import type { FestivalWithLineup } from "./types";
 

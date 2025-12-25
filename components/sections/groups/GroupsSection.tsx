@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 import { Button, ConfirmModal } from "@/components/ui";
@@ -42,7 +42,7 @@ export function GroupsSection({ user }: GroupsSectionProps) {
   const [searchResults, setSearchResults] = useState<Profile[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
   
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   
   // Fetch user's groups
   const fetchGroups = useCallback(async () => {
@@ -104,7 +104,7 @@ export function GroupsSection({ user }: GroupsSectionProps) {
   }, [fetchGroups]);
   
   // Create new group
-  const createGroup = async (e: React.FormEvent) => {
+  const createGroup = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !newGroupName.trim()) return;
     
@@ -135,7 +135,7 @@ export function GroupsSection({ user }: GroupsSectionProps) {
     }
     
     setIsCreating(false);
-  };
+  }, [user, newGroupName, newGroupDescription, supabase, fetchGroups]);
   
   // Open group detail drawer
   const openGroupDrawer = async (group: GroupWithDetails) => {
@@ -269,7 +269,7 @@ export function GroupsSection({ user }: GroupsSectionProps) {
   };
   
   // Search users for invitation
-  const searchUsers = async (query: string) => {
+  const searchUsers = useCallback(async (query: string) => {
     if (!user || !selectedGroup || query.length < 2) {
       setSearchResults([]);
       setHasSearched(false);
@@ -305,10 +305,10 @@ export function GroupsSection({ user }: GroupsSectionProps) {
     setSearchResults(
       profiles?.filter((p: Profile) => !excludeIds.has(p.id)) || []
     );
-  };
+  }, [user, selectedGroup, supabase]);
   
   // Invite user
-  const inviteUser = async (invitedUserId: string) => {
+  const inviteUser = useCallback(async (invitedUserId: string) => {
     if (!user || !selectedGroup) return;
     
     await supabase
@@ -323,10 +323,10 @@ export function GroupsSection({ user }: GroupsSectionProps) {
     setSearchQuery("");
     setSearchResults([]);
     setHasSearched(false);
-  };
+  }, [user, selectedGroup, supabase]);
   
   // Delete group
-  const deleteGroup = async () => {
+  const deleteGroup = useCallback(async () => {
     if (!selectedGroup || !user || selectedGroup.created_by !== user.id) return;
     
     setConfirmModal({
@@ -345,10 +345,10 @@ export function GroupsSection({ user }: GroupsSectionProps) {
         setConfirmModal({ isOpen: false, title: "", message: "", onConfirm: () => {} });
       },
     });
-  };
+  }, [selectedGroup, user, supabase, fetchGroups]);
   
   // Toggle description expansion
-  const toggleDescription = (groupId: string, e: React.MouseEvent) => {
+  const toggleDescription = useCallback((groupId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setExpandedDescriptions(prev => {
       const newSet = new Set(prev);
@@ -359,10 +359,10 @@ export function GroupsSection({ user }: GroupsSectionProps) {
       }
       return newSet;
     });
-  };
+  }, []);
   
   // Remove member from group
-  const removeMember = async (memberId: string) => {
+  const removeMember = useCallback(async (memberId: string) => {
     if (!selectedGroup || !user || selectedGroup.created_by !== user.id) return;
     if (memberId === selectedGroup.created_by) return; // Can't remove owner
     
@@ -389,7 +389,7 @@ export function GroupsSection({ user }: GroupsSectionProps) {
         setConfirmModal({ isOpen: false, title: "", message: "", onConfirm: () => {} });
       },
     });
-  };
+  }, [selectedGroup, user, supabase]);
   
   if (!user) {
     return (

@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useInView } from "react-intersection-observer";
 import { createClient } from "@/lib/supabase/client";
 import { StickyHeader } from "@/components/layout/StickyHeader";
-import { 
-  HeroSection, 
-  FestivalsSection, 
-  GroupsSection, 
-  InvitationsSection 
-} from "@/components/sections";
+import { HeroSection } from "@/components/sections";
 import type { User } from "@supabase/supabase-js";
+
+// Lazy load heavy sections
+const FestivalsSection = lazy(() => import("@/components/sections").then(mod => ({ default: mod.FestivalsSection })));
+const GroupsSection = lazy(() => import("@/components/sections").then(mod => ({ default: mod.GroupsSection })));
+const InvitationsSection = lazy(() => import("@/components/sections").then(mod => ({ default: mod.InvitationsSection })));
 
 export default function HomePage() {
   const [user, setUser] = useState<User | null>(null);
@@ -93,17 +93,35 @@ export default function HomePage() {
       
       {/* Festivals Section */}
       <div ref={festivalsRef}>
-        <FestivalsSection user={user} />
+        <Suspense fallback={
+          <div className="py-20 bg-[var(--background)] flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
+          </div>
+        }>
+          <FestivalsSection user={user} />
+        </Suspense>
       </div>
       
       {/* Groups Section */}
       <div ref={groupsRef}>
-        <GroupsSection user={user} />
+        <Suspense fallback={
+          <div className="py-20 bg-[var(--background-secondary)] flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
+          </div>
+        }>
+          <GroupsSection user={user} />
+        </Suspense>
       </div>
       
       {/* Invitations Section */}
       <div ref={invitationsRef}>
-        <InvitationsSection user={user} />
+        <Suspense fallback={
+          <div className="py-20 bg-[var(--background)] flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
+          </div>
+        }>
+          <InvitationsSection user={user} />
+        </Suspense>
       </div>
       
       {/* Footer */}

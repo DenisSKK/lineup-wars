@@ -1,10 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Users } from "lucide-react";
 import { Card, SkeletonList } from "@/components/ui";
 import { GroupCard } from "./GroupCard";
 import type { GroupWithDetails } from "./types";
+import { memo } from "react";
 
 interface GroupListProps {
   groups: GroupWithDetails[];
@@ -15,15 +15,7 @@ interface GroupListProps {
   onOpenGroup: (group: GroupWithDetails) => void;
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 },
-  },
-};
-
-export function GroupList({
+export const GroupList = memo(function GroupList({
   groups,
   isLoading,
   userId,
@@ -48,7 +40,7 @@ export function GroupList({
       <Card variant="default" padding="lg" className="text-center">
         <Users className="h-16 w-16 text-[var(--foreground-subtle)] mx-auto mb-4" />
         <p className="text-[var(--foreground-muted)] mb-2">
-          You haven't joined any groups yet
+          You haven&apos;t joined any groups yet
         </p>
         <p className="text-sm text-[var(--foreground-subtle)]">
           Create a new group to start comparing festival ratings with friends
@@ -58,13 +50,7 @@ export function GroupList({
   }
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-      className="space-y-4"
-    >
+    <div className="space-y-4">
       {groups.map((group) => (
         <GroupCard
           key={group.id}
@@ -75,6 +61,6 @@ export function GroupList({
           onClick={() => onOpenGroup(group)}
         />
       ))}
-    </motion.div>
+    </div>
   );
-}
+});
